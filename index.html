@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Dancing+Script&display=swap" rel="stylesheet">
+  <title>Astronish</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Main Section with Astronish, Logo, and Buttons -->
+  <section class="main-section">
+    <!-- Header Content on Top of the Background Image -->
+    <div class="header-content">
+      <div class="logo">
+        <img src="images/astronishLogo.jpg" alt="Astronish Logo"> <!-- Update with your logo path -->
+      </div>
+      <h1 class="page-title">
+  	<span class="above">Above</span> 
+  	<span class="beyond">Beyond</span>
+      </h1>
+      	<nav>
+    	  <ul>
+      	    <li><a href="about.html" class="header-btn">About</a></li>
+     	    <li><a href="contact.html" class="header-btn">Contact</a></li>
+   	  </ul>
+  	</nav>
+    </div>
+    
+  </section>
+
+  <!-- Buttons for Astronomy and Astrophysics -->
+  <div class="button-container">
+    <div class="button-wrapper">
+        <button class="btn" onclick="navigateTo('astronomy.html')">Astronomy</button>
+        <p class="description">Explore the vast universe, from stars and planets to galaxies and beyond.</p>
+    </div>
+    
+    <div class="button-wrapper">
+        <button class="btn" onclick="navigateTo('astrophysics.html')">Astrophysics</button>
+        <p class="description">Understand the forces and physics that govern space and time.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
