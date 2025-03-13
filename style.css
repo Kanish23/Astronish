@@ -118,7 +118,7 @@ nav ul li a:hover {
   align-items: center; /* Ensure items are aligned properly */
   width: 100%;
   gap: 20px; /* Space between buttons */
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 
