@@ -9,7 +9,7 @@ document.getElementById("signup-form").addEventListener("submit", function (e) {
     const password = document.getElementById("password").value;
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
+        .then((userCredential) => {
             alert("Sign-up successful! Redirecting...");
             window.location.href = "index.html"; // Redirect to home page
         })
