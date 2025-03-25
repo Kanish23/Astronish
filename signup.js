@@ -1,20 +1,20 @@
-import { auth } from "./firebase.js";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import { auth } from "./firebase.js"; // Import the auth instance from firebase.js
 
-document.getElementById("signup-form").addEventListener("submit", function (e) {
-    e.preventDefault();
+document.getElementById("signup-form").addEventListener("submit", function(event) {
+    event.preventDefault();
 
     const email = document.getElementById("signup-email").value;
     const password = document.getElementById("signup-password").value;
-    const errorText = document.getElementById("signup-error");
+    const message = document.getElementById("signup-message");
 
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            console.log("User signed up:", userCredential.user);
-            alert("Signup successful!");
-            window.location.href = "dashboard.html"; // Redirect after signup
+            message.textContent = "Signup successful! You can now log in.";
+            message.style.color = "green";
         })
         .catch((error) => {
-            errorText.innerText = error.message; // Show error message
+            message.textContent = error.message;
+            message.style.color = "red";
         });
 });
