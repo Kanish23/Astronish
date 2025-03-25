@@ -1,20 +1,24 @@
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
-import { auth } from "./firebase.js"; // Import the auth instance from firebase.js
+import { auth } from "./firebase.js";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
-document.getElementById("signup-form").addEventListener("submit", function(event) {
-    event.preventDefault();
+// Sign Up Function
+document.getElementById("signup-form").addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent page reload
 
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
-    const message = document.getElementById("signup-message");
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            message.textContent = "Signup successful! You can now log in.";
-            message.style.color = "green";
+        .then(() => {
+            alert("Sign-up successful! Redirecting...");
+            window.location.href = "index.html"; // Redirect to home page
         })
         .catch((error) => {
-            message.textContent = error.message;
-            message.style.color = "red";
+            if (error.code === "auth/email-already-in-use") {
+                alert("Error: This email is already in use. Try logging in.");
+            } else {
+                alert("Error: " + error.message);
+            }
         });
 });
+
