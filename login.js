@@ -28,7 +28,7 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
             if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
                 alert("Error: Invalid email or password.");
             } else {
-                alert("Error: " + error.message);
+                alert("Error: Invalid email or password.");
             }
         });
 });
