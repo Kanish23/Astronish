@@ -1,8 +1,20 @@
-<form id="login-form">
-    <input type="email" id="login-email" placeholder="Enter email" required />
-    <input type="password" id="login-password" placeholder="Enter password" required />
-    <button type="submit">Log In</button>
-</form>
-<p id="login-error"></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - Astronish</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Log In</h2>
+    <form id="login-form">  <!-- Make sure the ID matches what's in login.js -->
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <input type="password" id="password" placeholder="Enter your password" required>
+        <button type="submit">Log In</button>
+    </form>
 
-<script src="login.js"></script>
+    <script src="login.js"></script> <!-- Link to your login JavaScript file -->
+</body>
+</html>
+
