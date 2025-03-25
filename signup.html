@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up - Astronish</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 </head>
 <body>
     <h2>Sign Up</h2>
-    <form id="signup-form">
-        <input type="email" id="signup-email" placeholder="Email" required>
-        <input type="password" id="signup-password" placeholder="Password" required>
+    <form id="signup-form">  <!-- Make sure the ID matches what's in signup.js -->
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <input type="password" id="password" placeholder="Enter your password" required>
         <button type="submit">Sign Up</button>
     </form>
-    <p id="signup-message"></p>
 
-    <script type="module" src="firebase.js"></script>
-    <script type="module" src="signup.js"></script>
+    <script src="signup.js"></script> <!-- Link to your signup JavaScript file -->
 </body>
 </html>
+
