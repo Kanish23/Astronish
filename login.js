@@ -25,10 +25,17 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
             window.location.href = "index.html"; // Redirect to home page
         })
         .catch((error) => {
-            if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-                alert("Error: Invalid email or password.");
+            // Extract the error message
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            // Customize the error message for the user
+            if (errorCode === 'auth/user-not-found') {
+                alert("User not found. Please check your email.");
+            } else if (errorCode === 'auth/wrong-password') {
+                alert("Incorrect password. Please try again.");
             } else {
-                alert("Error: Invalid email or password.");
+                alert(errorMessage); // For other errors, show the Firebase error message
             }
         });
 });
