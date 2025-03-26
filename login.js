@@ -21,7 +21,7 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
 
      firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            alert("Login successful! Redirecting...");
+            // alert("Login successful! Redirecting...");
             window.location.href = "index.html"; // Redirect to home page
         })
         .catch((error) => {
