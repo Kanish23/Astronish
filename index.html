@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Main Section with Astronish, Logo, and Buttons -->
+
   <section class="main-section">
-    <!-- Header Content on Top of the Background Image -->
+   
     <div class="header-content">
       <div class="logo">
-        <img src="images/astronishLogo.jpg" alt="Astronish Logo" style="width:500%; height:auto;" > <!-- Update with your logo path -->
+        <img src="images/astronishLogo.jpg" alt="Astronish Logo" style="width:500%; height:auto;" > 
       </div>
       <h1 class="page-title">
   	<span class="above">Above</span> 
@@ -31,7 +31,6 @@
     
   </section>
 
-  <!-- Buttons for Astronomy and Astrophysics -->
   <div class="button-container">
     <div class="button-wrapper">
         <button class="btn" onclick="navigateTo('astronomy.html')">Astronomy</button>
@@ -43,6 +42,31 @@
         <p class="description">Understand the forces and physics that govern space and time.</p>
     </div>
   </div>
+
+  <div class="carousel-container">
+  <button class="arrow left" onclick="moveCarousel(-1)">&#8592;</button>
+
+  <div class="carousel-wrapper">
+    <div class="carousel" id="carousel">
+
+      <div class="carousel-item">
+        <img src="your-galaxy-image.png" alt="Astronomy">
+        <p>Astronomy</p>
+        <button class="section-btn" onclick="goToSection('astronomy')">Enter</button>
+      </div>
+
+      <div class="carousel-item">
+        <img src="your-telescope-image.png" alt="Astrophysics">
+        <p>Astrophysics</p>
+        <button class="section-btn" onclick="goToSection('astrophysics')">Enter</button>
+      </div>
+
+     
+    </div>
+  </div>
+
+  <button class="arrow right" onclick="moveCarousel(1)">&#8594;</button>
+</div>
 
   <script src="script.js"></script>
 </body>
