@@ -14,20 +14,41 @@
         <p class="section-intro">[Small introduction paragraph about the topic]</p>
         
         <div class="subsections-container">
-            <!-- Example Subsection -->
             <div class="subsection">
-                <h2 class="subheader">[Subheader Title]</h2>
-                <p class="subtext">[Relevant information about this subsection]</p>
-                <img src="[Image URL]" alt="[Image Description]" class="sub-image">
+                <h2 class="subheader">Right Ascencion and Declination</h2>
+                <p class="subtext">
+                    Right Ascension (RA) and Declination (Dec) make up the equatorial coordinate system, which is used to map the sky much like latitude and longitude are used to map Earth. 
+                    This system is centered on the celestial sphere, an imaginary globe surrounding Earth where all celestial bodies appear to lie. 
+                    Right Ascension (RA) measures the object's position eastward along the celestial equator, in units of hours, minutes, and seconds, ranging from 0h to 24h. 
+                    One hour equals 15 degrees of arc because Earth rotates 360° in 24 hours. Declination (Dec) measures how far north or south an object is from the celestial equator, in degrees, ranging from +90° at the celestial north pole to -90° at the south pole. 
+                    Using RA and Dec allows astronomers anywhere on Earth to locate celestial objects with high precision, regardless of their current position or time, as long as the object is above the horizon.</p>
+                <img src="https://lh6.googleusercontent.com/proxy/55quofLpbfj5yghhGsiRdRtyw5uWf9NyAHHlqM66oxl4QouD7WLhfIna5So9TtI55a5W_vrqzqzttYmBGMNCIAWVayWQNFuwAe-q0DdhCkUTr-BXAw" alt="RA and Declination" class="sub-image">
                 <p class="subtext">For more information, check out <a href="[Video/Software Link]" target="_blank">this resource</a>.</p>
             </div>
             
-            <!-- Duplicate this div for additional subsections -->
             <div class="subsection">
-                <h2 class="subheader">[Subheader Title]</h2>
-                <p class="subtext">[Relevant information about this subsection]</p>
-                <img src="[Image URL]" alt="[Image Description]" class="sub-image">
+                <h2 class="subheader">Altitude and Azimuth</h2>
+                <p class="subtext">
+                    The horizontal coordinate system (or Alt-Az system) describes a celestial object's position relative to an observer's horizon and is more intuitive for beginners. 
+                    Altitude is the vertical angle between an object and the horizon. It ranges from 0° (on the horizon) to 90° (directly overhead at the zenith). Azimuth is the compass direction along the horizon from the observer's north, measured in degrees from 0° to 360°. 
+                    For example, due east is 90°, south is 180°, and west is 270°. Since Alt-Az coordinates are based on your specific time and location, they change constantly as the Earth rotates. 
+                    Tools like planetarium apps or go-to mounts can help track this dynamic system in real time, making it particularly useful for visual observation or telescope alignment.
+                </p>
+                <img src="https://c.tadst.com/gfx/1200x630/horizontal-coordinate-system.png?1" alt="Altitude and Azimuth" class="sub-image">
                 <p class="subtext">For more information, check out <a href="[Video/Software Link]" target="_blank">this resource</a>.</p>
+            </div>
+
+             <div class="subsection">
+                <h2 class="subheader">How to switch between them</h2>
+                <p class="subtext">
+                    Converting between the Alt-Az system and RA-Dec requires knowledge of your geographic coordinates (latitude and longitude), the local sidereal time, and the current date and time. 
+                    This is because: RA and Dec are fixed coordinates (based on the stars’ positions in the sky). 
+                    Altitude and Azimuth are dynamic, changing as the Earth rotates. 
+                    The conversion involves complex trigonometric formulas, but most modern telescope software, star trackers, or apps handle this automatically. 
+                    Understanding this conversion is crucial when using a telescope with equatorial mounts or planning long-term observations of objects that appear only at certain times or locations in the sky.
+                </p>
+                <!-- <img src="https://c.tadst.com/gfx/1200x630/horizontal-coordinate-system.png?1" alt="Altitude and Azimuth" class="sub-image"> -->
+                <p class="subtext">For more information, check out <a href="https://astrogreg.com/convert_ra_dec_to_alt_az.html" target="_blank">this resource revealing the formulas</a>.</p>
             </div>
         </div>
     </section>
