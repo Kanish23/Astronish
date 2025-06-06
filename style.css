@@ -67,8 +67,9 @@ header {
 }
 
 .logo {
-  width: 55px;
-  height: auto;
+  height: 120px;
+  display: flex;
+  align-items: center;
 }
 
 .logo img {
