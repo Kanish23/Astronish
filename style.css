@@ -9,7 +9,7 @@ body {
 
 
 .main-section {
-  background: url('images/nebula.jpg') no-repeat center center/cover; 
+  background: url('images/earthMAIN.jpg') no-repeat center center/cover; 
   height: 100vh; 
   display: flex;
   flex-direction: column;
