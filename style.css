@@ -48,12 +48,15 @@ header {
 
 .header-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
   width: 100%;
+  max-width: 1200px; 
+  margin: 0 auto;   
   position: relative;
   z-index: 1;
+  padding: 0 20px;
 }
 
 .branding {
