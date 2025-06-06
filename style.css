@@ -23,14 +23,15 @@ body {
 header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   position: absolute;
-  top: 20px;
+  top: 10px;
   left: 0;
   right: 0;
-  padding: 0 40px;
+  padding: 0 20px;
   width: 100%;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 .header-content {
@@ -44,20 +45,19 @@ header {
 .branding {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  max-width: 80%;
 }
 
 .logo {
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  width: 60px; 
+  width: 55px;
   height: auto;
 }
 
 .logo img {
-  width: 60px;
+  width: 100%;
   height: auto;
+  display: block;
 }
 
 h1 {
