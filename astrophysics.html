@@ -26,5 +26,12 @@
         <div class="topic-box" onclick="location.href='relativity_gravity.html';">General Relativity & Gravity</div>
         <div class="topic-box" onclick="location.href='cmb_bigbang.html';">Cosmic Microwave Background & Big Bang Theory</div>
     </section>
+	<button onclick="startQuiz('astrophysics')">Take Astrophysics Quiz</button>
+	<script>
+  		function startQuiz(topic) {
+   		localStorage.setItem('quizTopic', topic);
+   		window.location.href = 'quiz.html';
+ 		}	
+	</script>
 </body>
 </html>
