@@ -1,23 +1,57 @@
-const questions = {
-  astronomy: [/* ... */],
-  astrophysics: [/* ... */]
-};
+const astronomyQuestions = [
+  {
+    question: "What is the closest planet to the Sun?",
+    options: ["Earth", "Venus", "Mercury", "Mars"],
+    correctAnswer: "Mercury"
+  },
+  {
+    question: "What tool do astronomers use to observe distant stars?",
+    options: ["Microscope", "Compass", "Telescope", "Radar"],
+    correctAnswer: "Telescope"
+  }
+  // Add more questions here...
+];
 
-function loadQuiz() {
-  const topic = localStorage.getItem('quizTopic');
-  const quizData = questions[topic];
-  const container = document.getElementById('quiz-container');
+// Firestore setup (assumes firebase-config.js already initializes Firebase)
+const db = firebase.firestore();
 
-  quizData.forEach((q, i) => {
-    const div = document.createElement('div');
-    div.innerHTML = `
+// Wait for the DOM
+window.addEventListener("DOMContentLoaded", () => {
+  const topic = localStorage.getItem("quizTopic"); // e.g., "astronomy"
+  const questions = topic === "astronomy" ? astronomyQuestions : [];
+
+  const container = document.getElementById("questions-container");
+
+  questions.forEach((q, i) => {
+    const block = document.createElement("div");
+    block.innerHTML = `
       <p>${i + 1}. ${q.question}</p>
-      ${q.options.map(opt => `
+      ${q.options.map(option => `
         <label>
-          <input type="radio" name="q${i}" value="${opt}">
-          ${opt}
-        </label><br>`).join('')}
+          <input type="radio" name="q${i}" value="${option}"> ${option}
+        </label><br>
+      `).join('')}
     `;
-    container.appendChild(div);
+    container.appendChild(block);
   });
-}
+
+  document.getElementById("quiz-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    let score = 0;
+
+    questions.forEach((q, i) => {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (selected && selected.value === q.correctAnswer) score++;
+    });
+
+    document.getElementById("score-display").textContent = `You scored ${score}/${questions.length}`;
+
+    const user = firebase.auth().currentUser;
+    if (user) {
+      const uid = user.uid;
+      await db.collection("scores").doc(uid).set({
+        [topic]: score
+      }, { merge: true });
+    }
+  });
+});
