@@ -8,34 +8,34 @@ const firebaseConfig = {
   measurementId: "G-X41L76SELD"
 };
 
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 
 
 // Login Function
 document.getElementById("login-form").addEventListener("submit", function (e) {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault(); 
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
      firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // alert("Login successful! Redirecting...");
-            window.location.href = "index.html"; // Redirect to home page
+            
+            window.location.href = "index.html"; 
         })
         .catch((error) => {
-            // Extract the error message
+         
             const errorCode = error.code;
             const errorMessage = error.message;
 
-            // Customize the error message for the user
+        
             if (errorCode === 'auth/user-not-found') {
                 alert("User not found. Please check your email.");
             } else if (errorCode === 'auth/wrong-password') {
                 alert("Incorrect password. Please try again.");
             } else {
-                alert(errorMessage); // For other errors, show the Firebase error message
+                alert(errorMessage); 
             }
         });
 });
