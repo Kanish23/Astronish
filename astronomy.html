@@ -26,5 +26,12 @@
         <div class="topic-box" onclick="location.href='galaxies.html';">Galaxies</div>
         <div class="topic-box" onclick="location.href='cosmology.html';">Cosmology</div>
     </section>
+	<button onclick="startQuiz('astronomy')">Take Astronomy Quiz</button>
+	<script>
+  		function startQuiz(topic) {
+   	 	localStorage.setItem('quizTopic', topic);
+    		window.location.href = 'quiz.html';
+ 	 	}
+	</script>
 </body>
 </html>
