@@ -1,9 +1,9 @@
-// Function to navigate to a new page
+
 function navigateTo(page) {
     window.location.href = page;
 }
 
-// Function to go back to the previous page
+
 function goBack() {
     window.history.back();
 }
@@ -18,14 +18,14 @@ const firebaseConfig = {
   measurementId: "G-X41L76SELD"
 };
 
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     let displayName = user.displayName;
     if (!displayName && user.email) {
-      displayName = user.email.split('@')[0]; // fallback to email username
+      displayName = user.email.split('@')[0];
     }
     const welcomeEl = document.getElementById('welcomeMessage');
     if (welcomeEl) {
@@ -37,7 +37,6 @@ firebase.auth().onAuthStateChanged((user) => {
     if (welcomeEl) {
       welcomeEl.textContent = '';
     }
-    // Optional: redirect to login
-    // window.location.href = 'login.html';
+ 
   }
 });
