@@ -9,7 +9,7 @@ const astronomyQuestions = [
     options: ["Microscope", "Compass", "Telescope", "Radar"],
     correctAnswer: "Telescope"
   }
-  // Add more questions here...
+
 ];
 
 const astrophysicsQuestions = [
@@ -28,13 +28,12 @@ const astrophysicsQuestions = [
     options: ["Radio waves", "Sound waves", "Water waves", "Gamma rays"],
     correctAnswer: "Radio waves"
   }
-  // Add more astrophysics questions here
+
 ];
 
-// Firestore setup (assumes firebase-config.js already initializes Firebase)
+
 const db = firebase.firestore();
 
-// Wait for the DOM
 window.addEventListener("DOMContentLoaded", () => {
   const topic = localStorage.getItem("quizTopic");
   let questions = [];
