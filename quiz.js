@@ -12,13 +12,38 @@ const astronomyQuestions = [
   // Add more questions here...
 ];
 
+const astrophysicsQuestions = [
+  {
+    question: "What is a black hole?",
+    options: [
+      "A hole in space",
+      "A region with extremely low gravity",
+      "A region of spacetime with gravity so strong nothing can escape",
+      "An exploding star"
+    ],
+    correctAnswer: "A region of spacetime with gravity so strong nothing can escape"
+  },
+  {
+    question: "What type of wave is used to detect distant galaxies?",
+    options: ["Radio waves", "Sound waves", "Water waves", "Gamma rays"],
+    correctAnswer: "Radio waves"
+  }
+  // Add more astrophysics questions here
+];
+
 // Firestore setup (assumes firebase-config.js already initializes Firebase)
 const db = firebase.firestore();
 
 // Wait for the DOM
 window.addEventListener("DOMContentLoaded", () => {
   const topic = localStorage.getItem("quizTopic"); // e.g., "astronomy"
-  const questions = topic === "astronomy" ? astronomyQuestions : [];
+  let questions = [];
+
+  if (topic === "astronomy") {
+    questions = astronomyQuestions;
+  } else if (topic === "astrophysics") {
+    questions = astrophysicsQuestions;
+  }
 
   const container = document.getElementById("questions-container");
 
