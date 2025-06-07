@@ -36,7 +36,7 @@ const db = firebase.firestore();
 
 // Wait for the DOM
 window.addEventListener("DOMContentLoaded", () => {
-  const topic = localStorage.getItem("quizTopic"); // e.g., "astronomy"
+  const topic = localStorage.getItem("quizTopic");
   let questions = [];
 
   if (topic === "astronomy") {
