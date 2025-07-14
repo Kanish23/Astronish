@@ -1,49 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Astronish</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <section class="main-section"> <!-- Hi -->
+  <section class="main-section">
     <header>
-    <div class="top-bar-bg"></div>
-    <div class="header-content">
-    <div class="branding">
-      <div class="logo">
-        <img src="images/astronishLogo.jpg" alt="Astronish Logo"> 
+      <div class="top-bar-bg"></div>
+      <div class="header-content">
+        <div class="branding">
+          <div class="logo">
+            <img src="images/astronishLogo.jpg" alt="Astronish Logo">
+          </div>
+          <div id="welcomeMessage" style="color: rgb(255, 149, 1); margin-left: 15px; font-weight: bold;"></div>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="about.html" class="header-btn">About Me</a></li>
+            <li><a href="contact.html" class="header-btn">Contact</a></li>
+            <li><a href="signup.html" class="header-btn">Sign Up</a></li>
+            <li><a href="login.html" class="header-btn">Log In</a></li>
+          </ul>
+        </nav>
       </div>
-      <div id="welcomeMessage" style="color: orange; margin-left: 15px; font-weight: bold;"></div>
-    </div>
-      <nav>
-    	  <ul>
-      	  <li><a href="about.html" class="header-btn">About Me</a></li>
-     	    <li><a href="contact.html" class="header-btn">Contact</a></li>
-          <li><a href="signup.html" class="header-btn">Sign Up</a></li>
-          <li><a href="login.html" class="header-btn">Log In</a></li>
-   	    </ul>
-  	  </nav>
-    </div>
     </header>
-  </section>
 
-  <div class="button-container">
-    <div class="button-wrapper">
+    <main>
+      <h1>Welcome to Astronish</h1>
+      <p>Your one-stop destination for all things astronomy and astrophysics.</p>
+    </main>
+
+    <div class="button-container">
+      <div class="button-wrapper">
         <button class="btn" onclick="navigateTo('astronomy.html')">Astronomy</button>
         <p class="description">Explore the vast universe, from stars and planets to galaxies and beyond.</p>
-    </div>
-    
-    <div class="button-wrapper">
+      </div>
+
+      <div class="button-wrapper">
         <button class="btn" onclick="navigateTo('astrophysics.html')">Astrophysics</button>
         <p class="description">Understand the forces and physics that govern space and time.</p>
+      </div>
     </div>
-  </div>
+
+    <div class="footer">
+      <p>&copy; 2023 Astronish. All rights reserved.</p>
+      <p>Follow us on:
+        <a href="https://www.facebook.com" target="_blank">Facebook</a> |
+        <a href="https://www.twitter.com" target="_blank">Twitter</a> |
+        <a href="https://www.instagram.com" target="_blank">Instagram</a>
+      </p>
+    </div>
+  </section>
+
+
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
