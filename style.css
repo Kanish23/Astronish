@@ -94,8 +94,8 @@ header {
 
 .main-section p {
   color: rgb(0, 0, 0);
-  -webkit-text-stroke: 1px white; 
-  text-stroke: 1px white;
+  -webkit-text-stroke: 0.5px white; 
+  text-stroke: 0.5px white;
 }
 
 
