@@ -9,7 +9,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: black;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 
 
@@ -93,8 +93,11 @@ header {
 }
 
 .main-section p {
-  color: rgb(0, 0, 0);
-
+  background: linear-gradient(90deg, orange, rgb(138, 101, 219), #ff9501);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 
