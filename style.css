@@ -135,10 +135,10 @@ nav ul li a:hover {
 
 .button-container {
   display: flex;
-  justify-content: space-between; 
+  justify-content: center; 
   align-items: center; 
-  width: 100%;
-  gap: 20px; 
+  width: auto;
+  gap: 40px; 
   margin-top: 5px;
 }
 
