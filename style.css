@@ -89,7 +89,7 @@ header {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 1px black;
+  -webkit-text-stroke: 1px black; /*Broken Outline, Fix Later*/
   margin: 10px 0;
 }
 
@@ -99,7 +99,6 @@ header {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 10px black;
 }
 
 
@@ -150,6 +149,24 @@ nav ul li a:hover {
 }
 
 .btn {
+  width: 120px; 
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background: radial-gradient(circle at 30% 30%, #ffe066, #ff9501 70%, #b8860b 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Original Button Style
+ .btn {
   width: 100%; 
   height: 150px; 
   font-size: 24px;
@@ -162,13 +179,19 @@ nav ul li a:hover {
   transition: 0.3s ease-in-out;
   background-size: cover; 
   background-position: center; 
+} 
+*/
+
+.btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
-
+/* Original Button Hover Effect 
 .btn:hover {
   background-color: #e68900; 
 }
-
+*/
 
 .button-wrapper:first-child .btn {
   background-image: url('images/astronomy5.jpg'); 
