@@ -99,7 +99,7 @@ header {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 1px black;
+  -webkit-text-stroke: 10px black;
 }
 
 
