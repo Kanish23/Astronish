@@ -39,8 +39,8 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;   /* Center .header-content horizontally */
+  align-items: center;       /* Center vertically */
   position: absolute;
   top: 15px;
   left: 0;
