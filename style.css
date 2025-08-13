@@ -215,7 +215,7 @@ nav ul li a:hover {
 
 .topics {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 20px;
   margin-top: 40px;
