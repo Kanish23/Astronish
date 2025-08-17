@@ -183,6 +183,7 @@ nav ul li a:hover {
     margin: 20px;
     padding: 10px 20px;
     font-size: 18px;
+    z-index: 999;
     color: white;
     background-color: #ff6600; 
     text-decoration: none;
