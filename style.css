@@ -14,8 +14,9 @@ body {
 
 
 .main-section {
-  background: url('images/earthMAIN.jpg') no-repeat center center/cover; 
-  height: 100vh; 
+  background: url('images/earthMAIN.jpg') no-repeat center center;
+  background-size: cover;
+  min-height: 100vh; 
   display: flex;
   flex-direction: column;
   justify-content: center; 
@@ -24,6 +25,17 @@ body {
   padding-right: 0; 
 }
 
+.top-bar-bg {
+  position: static; /* was absolute */
+  height: 120px;
+  background-color: rgba(128, 128, 128, 0.2);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  z-index: 0;
+}
+
+/*                  Original top bar code
 .top-bar-bg {
   position: absolute;
   top: 0;
@@ -36,11 +48,25 @@ body {
   justify-content: center; 
   z-index: 0;
 }
+*/
 
 header {
   display: flex;
   justify-content: center;   /* Center .header-content horizontally */
   align-items: center;       /* Center vertically */
+  position: static;          /* was absolute */
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+
+/*
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;      
   position: absolute;
   top: 15px;
   left: 0;
@@ -50,6 +76,8 @@ header {
   z-index: 10;
   box-sizing: border-box;
 }
+*/
+
 
 .header-content {
   display: flex;
