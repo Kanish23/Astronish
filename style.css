@@ -107,10 +107,6 @@ nav ul {
 }
 
 
-nav ul li {
-  display: inline-block; 
-}
-
 nav ul li a {
   text-decoration: none;
   color: orange;
@@ -120,6 +116,7 @@ nav ul li a {
   padding: 8px 16px;
   border-radius: 5px;
   transition: background-color 0.3s ease-in-out;
+  outline: none;
 }
 
 nav ul li a:hover {
@@ -179,6 +176,9 @@ nav ul li a:hover {
 
 
 .back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
     display: inline-block;
     margin: 20px;
     padding: 10px 20px;
