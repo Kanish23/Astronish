@@ -40,3 +40,41 @@ firebase.auth().onAuthStateChanged((user) => {
  
   }
 });
+
+//For the scrolling mechanism
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.button-container').forEach(container => {
+    let isDown = false, startX, scrollLeft;
+
+    container.addEventListener('mousedown', e => {
+      isDown = true;
+      startX = e.pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+      container.classList.add('dragging');
+      e.preventDefault();
+    });
+
+    container.addEventListener('mouseleave', () => { isDown = false; container.classList.remove('dragging'); });
+    container.addEventListener('mouseup', () => { isDown = false; container.classList.remove('dragging'); });
+
+    container.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      container.scrollLeft = scrollLeft - walk;
+    });
+
+    // touch support
+    let touchStartX = 0;
+    container.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].pageX - container.offsetLeft;
+      scrollLeft = container.scrollLeft;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', e => {
+      const x = e.touches[0].pageX - container.offsetLeft;
+      const walk = (x - touchStartX) * 1.5;
+      container.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
+  });
+});

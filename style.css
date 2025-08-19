@@ -152,7 +152,50 @@ nav ul li a:hover {
   color: black;
 }
 
+.button-container {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  padding: 20px 24px;        /* breathing room for scroll */
+  overflow-x: auto;          /* enable horizontal scrolling */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
+}
 
+/* nicer thin scrollbar (optional) */
+.button-container::-webkit-scrollbar { height: 10px; }
+.button-container::-webkit-scrollbar-track { background: transparent; }
+.button-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+
+.button-wrapper {
+  flex: 0 0 auto;            /* don't stretch — size determined by .btn */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: center; /* snap each wrapper to center */
+}
+
+/* make planet buttons responsive instead of fixed 500px */
+.btn {
+  width: clamp(140px, 30vw, 300px);
+  height: clamp(140px, 30vw, 300px);
+  border-radius: 50%;
+  font-size: clamp(0.9rem, 2.2vw, 1.5rem);
+}
+
+/* keep hover interactions */
+.btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+
+
+/* All this is the old button containers before testing with the new scrolling mechanism. Keep just incase. Lines 199-236 */
+
+/*
 .button-container {
   display: flex;
   justify-content: center; 
@@ -167,6 +210,7 @@ nav ul li a:hover {
   flex: 1; 
   text-align: center; 
 }
+
 
 .btn {
   width: 500px; 
@@ -190,6 +234,7 @@ nav ul li a:hover {
   transform: scale(1.08);
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
+  */
 
 
 .button-wrapper:first-child .btn {
