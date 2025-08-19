@@ -156,12 +156,14 @@ nav ul li a:hover {
   display: flex;
   gap: 40px;
   align-items: center;
+  justify-content: center;
   padding: 20px 24px;        /* breathing room for scroll */
   overflow-x: auto;          /* enable horizontal scrolling */
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   width: 100%;
   box-sizing: border-box;
+  scroll-padding-inline: 50%; /* helps centering when snapping */
 }
 
 /* nicer thin scrollbar (optional) */

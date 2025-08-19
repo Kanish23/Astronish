@@ -44,7 +44,7 @@ firebase.auth().onAuthStateChanged((user) => {
 //For the scrolling mechanism
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.button-container').forEach(container => {
-    let isDown = false, startX, scrollLeft;
+    let isDown = false, startX = 0, scrollLeft = 0;
 
     container.addEventListener('mousedown', e => {
       isDown = true;
@@ -77,4 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
       container.scrollLeft = scrollLeft - walk;
     }, { passive: true });
   });
+
+  console.log('drag-to-scroll initialized');
 });
