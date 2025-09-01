@@ -152,31 +152,86 @@ nav ul li a:hover {
   color: black;
 }
 
+/* hide native scrollbar but keep scroll functionality */
 .button-container {
   display: flex;
-  gap: 40px;
+  gap: 24px;
   align-items: center;
-  justify-content: center;
-  padding: 20px 24px;        /* breathing room for scroll */
-  overflow-x: auto;          /* enable horizontal scrolling */
+  justify-content: center;           /* center when not overflowing */
+  padding: 20px 36px;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  width: 100%;
-  box-sizing: border-box;
-  scroll-padding-inline: 50%; /* helps centering when snapping */
+  scrollbar-width: none; /* firefox */
+  scroll-padding-inline: 50%;        /* helps centering first/last */
 }
-
-/* nicer thin scrollbar (optional) */
-.button-container::-webkit-scrollbar { height: 10px; }
-.button-container::-webkit-scrollbar-track { background: transparent; }
-.button-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+.button-container::-webkit-scrollbar { display: none; }
 
 .button-wrapper {
-  flex: 0 0 auto;            /* don't stretch — size determined by .btn */
+  flex: 0 0 auto;                    /* don't stretch */
+  scroll-snap-align: center;
+  min-width: clamp(140px, 26vw, 300px);
   display: flex;
   justify-content: center;
   align-items: center;
-  scroll-snap-align: center; /* snap each wrapper to center */
+}
+
+/* base state: slightly smaller and translucent */
+.btn {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 240ms ease;
+  transform: scale(0.85);
+  opacity: 0.55;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* active (centered) item: full size/opacity */
+.button-wrapper.active .btn {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* optional: emphasize hovered focused item */
+.button-wrapper .btn:focus,
+.button-wrapper .btn:hover {
+  transform: scale(1.03);
+}
+
+.button-container-wrap {
+  position: relative; /* ensure absolute arrows are positioned relative to this */
+  z-index: 2; /* keep wrapper in stacking context */
+}
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); /* vertically center relative to wrapper */
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* left / right placement */
+.carousel-prev { left: 8px; }
+.carousel-next { right: 8px; }
+
+/* smaller on narrow screens */
+@media (max-width: 520px) {
+  .carousel-btn { width: 36px; height: 36px; }
+  .carousel-prev { left: 6px; }
+  .carousel-next { right: 6px; }
 }
 
 /* make planet buttons responsive instead of fixed 500px */

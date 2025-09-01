@@ -41,42 +41,103 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-//For the scrolling mechanism
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.button-container').forEach(container => {
-    let isDown = false, startX = 0, scrollLeft = 0;
+    const children = () => Array.from(container.querySelectorAll('.button-wrapper'));
 
-    container.addEventListener('mousedown', e => {
-      isDown = true;
-      startX = e.pageX - container.offsetLeft;
-      scrollLeft = container.scrollLeft;
-      container.classList.add('dragging');
-      e.preventDefault();
+    function getCenteredIndex() {
+      const items = children();
+      if (!items.length) return 0;
+      const center = container.scrollLeft + container.clientWidth / 2;
+      let best = 0, bestDist = Infinity;
+      items.forEach((it, i) => {
+        const itCenter = it.offsetLeft + it.offsetWidth / 2;
+        const d = Math.abs(itCenter - center);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      return best;
+    }
+
+    function scrollToIndex(i) {
+      const items = children();
+      if (!items.length) return;
+      i = Math.max(0, Math.min(items.length - 1, i));
+      items[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      // update active after smooth scroll (give it a moment)
+      setTimeout(() => updateActive(container), 320);
+    }
+
+    function updateActive(containerEl) {
+      const items = children();
+      if (!items.length) return;
+      const center = containerEl.scrollLeft + containerEl.clientWidth / 2;
+      let best = 0, bestDist = Infinity;
+      items.forEach((it, i) => {
+        const itCenter = it.offsetLeft + it.offsetWidth / 2;
+        const d = Math.abs(itCenter - center);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      items.forEach((it, i) => it.classList.toggle('active', i === best));
+    }
+
+    // wire prev/next buttons (assumes .carousel-prev/.carousel-next sit in parent wrapper)
+    const parent = container.parentElement;
+    const prevBtn = parent ? parent.querySelector('.carousel-prev') : null;
+    const nextBtn = parent ? parent.querySelector('.carousel-next') : null;
+
+    if (nextBtn) nextBtn.addEventListener('click', () => scrollToIndex(getCenteredIndex() + 1));
+    if (prevBtn) prevBtn.addEventListener('click', () => scrollToIndex(getCenteredIndex() - 1));
+
+    // update active initially and after scrolling stops
+    updateActive(container);
+    let scrollTimer = null;
+    container.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => updateActive(container), 100);
     });
 
-    container.addEventListener('mouseleave', () => { isDown = false; container.classList.remove('dragging'); });
-    container.addEventListener('mouseup', () => { isDown = false; container.classList.remove('dragging'); });
-
-    container.addEventListener('mousemove', e => {
-      if (!isDown) return;
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      container.scrollLeft = scrollLeft - walk;
+    // keyboard arrow support when focused
+    container.tabIndex = 0;
+    container.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(getCenteredIndex() + 1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); scrollToIndex(getCenteredIndex() - 1); }
     });
-
-    // touch support
-    let touchStartX = 0;
-    container.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].pageX - container.offsetLeft;
-      scrollLeft = container.scrollLeft;
-    }, { passive: true });
-
-    container.addEventListener('touchmove', e => {
-      const x = e.touches[0].pageX - container.offsetLeft;
-      const walk = (x - touchStartX) * 1.5;
-      container.scrollLeft = scrollLeft - walk;
-    }, { passive: true });
   });
+});
 
-  console.log('drag-to-scroll initialized');
+document.addEventListener('DOMContentLoaded', () => {
+  function scrollContainerToIndex(container, targetIndex) {
+    const items = Array.from(container.querySelectorAll('.button-wrapper'));
+    if (!items.length) return;
+    const i = Math.max(0, Math.min(items.length - 1, targetIndex));
+    items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    // mark active after animation
+    setTimeout(() => {
+      items.forEach((it, idx) => it.classList.toggle('active', idx === i));
+    }, 320);
+  }
+
+  document.addEventListener('click', (e) => {
+    const nextBtn = e.target.closest('.carousel-next');
+    const prevBtn = e.target.closest('.carousel-prev');
+    if (!nextBtn && !prevBtn) return;
+
+    const wrap = (nextBtn || prevBtn).closest('.button-container-wrap');
+    if (!wrap) return;
+    const container = wrap.querySelector('.button-container');
+    if (!container) return;
+
+    // compute current centered index
+    const items = Array.from(container.querySelectorAll('.button-wrapper'));
+    const center = container.scrollLeft + container.clientWidth / 2;
+    let best = 0, bestDist = Infinity;
+    items.forEach((it, i) => {
+      const itCenter = it.offsetLeft + it.offsetWidth / 2;
+      const d = Math.abs(itCenter - center);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+
+    const target = nextBtn ? best + 1 : best - 1;
+    scrollContainerToIndex(container, target);
+  });
 });
