@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Carousel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .carousel-container {
+            background-color: #1e293b;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+        }
+        .planet-image {
+            transition: transform 0.5s ease-in-out;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="selection:bg-indigo-500 selection:text-white">
+    <div class="carousel-container w-full max-w-4xl rounded-xl p-6 md:p-12 space-y-8">
+        <h1 class="text-3xl md:text-5xl font-bold text-center text-indigo-400">Our Solar System</h1>
+        
+        <!-- Main Carousel -->
+        <div class="relative w-full aspect-video md:aspect-w-16 md:aspect-h-9 overflow-hidden rounded-xl">
+            <div id="carousel-track" class="flex transition-transform duration-500 ease-in-out w-full h-full">
+                <!-- Planet images will be injected here by JavaScript -->
+            </div>
+            
+            <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm text-white p-3 rounded-full hover:bg-opacity-40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm text-white p-3 rounded-full hover:bg-opacity-40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const planets = [
+            { name: "Telescope", image: src="images/telescope1.jpeg?text=Telescope", url: "telescopes.html"},
+            { name: "Position Calculation", image: src="images/starmap.jpg", url: "position_calculation.html"},
+            { name: "Stars", image: src="images/sun.jpg", url: "stars.html"},
+            { name: "Galaxies", image: src="images/galaxy1.jpg", url: "galaxies.html"},
+            { name: "Cosmology", image: src="images/ultrawide.jpg", url: "cosmology.html"},
+           // { name: "Saturn", image: "https://placehold.co/800x600/d97706/ffffff?text=Saturn", url: "saturn.html" }, -->
+           // { name: "Uranus", image: "https://placehold.co/800x600/14b8a6/ffffff?text=Uranus", url: "uranus.html" },
+           // { name: "Neptune", image: "https://placehold.co/800x600/2563eb/ffffff?text=Neptune", url: "neptune.html" } 
+           // <div class="topic-box astronomy-topic" onclick="location.href='telescopes.html';">Telescopes</div>
+        //<div class="topic-box astronomy-topic" onclick="location.href='position_calculation.html';">Position Calculation</div>
+        //<div class="topic-box astronomy-topic" onclick="location.href='stars.html';">Stars</div>
+        //<div class="topic-box astronomy-topic" onclick="location.href='galaxies.html';">Galaxies</div>
+       // <div class="topic-box astronomy-topic" onclick="location.href='cosmology.html';">Cosmology</div> -->
+        ];
+
+        const carouselTrack = document.getElementById('carousel-track');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        let currentIndex = 0;
+        let autoScrollInterval;
+
+        // Function to create and display images
+        function renderPlanets() {
+            carouselTrack.innerHTML = ''; // Clear existing images
+            planets.forEach((planet, index) => {
+                const img = document.createElement('img');
+                img.src = planet.image;
+                img.alt = planet.name;
+                img.classList.add('planet-image', 'w-full', 'h-full', 'object-cover', 'rounded-full', 'cursor-pointer', 'flex-shrink-0');
+                img.dataset.index = index;
+                // Updated click event to navigate
+                img.addEventListener('click', () => {
+                    window.location.href = planet.url;
+                });
+                carouselTrack.appendChild(img);
+            });
+            updateCarousel();
+            startAutoScroll();
+        }
+
+        // Function to update the carousel position
+        function updateCarousel() {
+            const offset = -currentIndex * 100;
+            carouselTrack.style.transform = `translateX(${offset}%)`;
+        }
+
+        // Function to start automatic scrolling
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % planets.length;
+                updateCarousel();
+            }, 3000); // Scrolls every 3 seconds
+        }
+
+        // Function to stop automatic scrolling
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
+        }
+
+        // Navigation controls
+        nextBtn.addEventListener('click', () => {
+            stopAutoScroll();
+            currentIndex = (currentIndex + 1) % planets.length;
+            updateCarousel();
+            startAutoScroll();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoScroll();
+            currentIndex = (currentIndex - 1 + planets.length) % planets.length;
+            updateCarousel();
+            startAutoScroll();
+        });
+
+        // Initialize the carousel
+        window.onload = renderPlanets;
+    </script>
+</body>
+</html>
