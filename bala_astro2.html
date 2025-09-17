@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Carousel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .carousel-container {
+            background-color: #1e293b;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+            max-width: 100%;
+            width: 100%;
+            position: relative;
+        }
+        .carousel-track-wrapper {
+            overflow: hidden;
+            position: relative;
+            padding: 1rem 0;
+        }
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            transition: transform 0.5s ease-in-out;
+            will-change: transform;
+            width: max-content;
+        }
+        .planet-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin: 0 1rem;
+            text-align: center;
+            transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
+            cursor: pointer;
+        }
+        .planet-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .planet-item:hover .planet-image {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        .highlighted .planet-image {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px rgba(74, 222, 128, 0.8);
+            border: 4px solid #4ade80;
+        }
+        .planet-name {
+            margin-top: 0.5rem;
+            font-weight: bold;
+            color: #d1d5db;
+        }
+        .nav-btn {
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="selection:bg-indigo-500 selection:text-white">
+    <div class="carousel-container rounded-xl p-6 md:p-12 space-y-8">
+        <h1 class="text-3xl md:text-5xl font-bold text-center text-indigo-400">Astronomy Topics</h1>
+        
+        <!-- Main Carousel -->
+        <div class="relative w-full rounded-xl">
+            <div id="carousel-track-wrapper" class="carousel-track-wrapper">
+                <div id="carousel-track" class="carousel-track">
+                    <!-- Planet images will be injected here by JavaScript -->
+                </div>
+            </div>
+            
+            <button id="prev-btn" class="nav-btn absolute left-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm text-white p-3 rounded-full hover:bg-opacity-40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button id="next-btn" class="nav-btn absolute right-0 top-1/2 -translate-y-1/2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm text-white p-3 rounded-full hover:bg-opacity-40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const planets = [
+            { name: "Telescope", image: src="images/telescope1.jpeg?text=Telescope", url: "telescopes.html"},
+            { name: "Position Calculation", image: src="images/starmap.jpg", url: "position_calculation.html"},
+            { name: "Stars", image: src="images/sun.jpg", url: "stars.html"},
+            { name: "Galaxies", image: src="images/galaxy1.jpg", url: "galaxies.html"},
+            { name: "Cosmology", image: src="images/ultrawide.jpg", url: "cosmology.html"},
+        ];
+
+        const carouselTrack = document.getElementById('carousel-track');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let autoScrollInterval;
+        const scrollSpeed = 3000; // Scroll every 3 seconds
+
+        let currentIndex = 2; // Start with the third planet highlighted
+
+        function renderPlanets() {
+            carouselTrack.innerHTML = '';
+            planets.forEach((planet, index) => {
+                const planetItem = document.createElement('div');
+                planetItem.classList.add('planet-item');
+                
+                const img = document.createElement('img');
+                img.src = planet.image;
+                img.alt = planet.name;
+                img.classList.add('planet-image');
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.classList.add('planet-name');
+                nameDiv.textContent = planet.name;
+
+                planetItem.appendChild(img);
+                planetItem.appendChild(nameDiv);
+
+                planetItem.addEventListener('click', () => {
+                    window.location.href = planet.url;
+                });
+                carouselTrack.appendChild(planetItem);
+            });
+            updateCarousel();
+            startAutoScroll();
+        }
+
+        function updateCarousel() {
+            const trackWidth = carouselTrack.offsetWidth;
+            const itemWidth = carouselTrack.children[0].offsetWidth + 32; // 150px + 2rem (32px) margin
+            const offset = (trackWidth / 2) - (itemWidth / 2) - (currentIndex * itemWidth);
+            carouselTrack.style.transform = `translateX(${offset}px)`;
+            updateHighlights();
+        }
+
+        function startAutoScroll() {
+            stopAutoScroll(); // Clear any existing interval
+            autoScrollInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % planets.length;
+                updateCarousel();
+            }, scrollSpeed);
+        }
+
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
+        }
+
+        function updateHighlights() {
+            document.querySelectorAll('.planet-item').forEach((item, index) => {
+                if (index === currentIndex) {
+                    item.classList.add('highlighted');
+                } else {
+                    item.classList.remove('highlighted');
+                }
+            });
+        }
+
+        nextBtn.addEventListener('click', () => {
+            stopAutoScroll();
+            currentIndex = (currentIndex + 1) % planets.length;
+            updateCarousel();
+            setTimeout(startAutoScroll, scrollSpeed / 2); // Resume auto-scroll after a short delay
+        });
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoScroll();
+            currentIndex = (currentIndex - 1 + planets.length) % planets.length;
+            updateCarousel();
+            setTimeout(startAutoScroll, scrollSpeed / 2); // Resume auto-scroll after a short delay
+        });
+
+        window.onload = renderPlanets;
+    </script>
+</body>
+</html>
