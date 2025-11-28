@@ -88,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextBtn) nextBtn.addEventListener('click', () => scrollToIndex(getCenteredIndex() + 1));
     if (prevBtn) prevBtn.addEventListener('click', () => scrollToIndex(getCenteredIndex() - 1));
 
+    // center the first item on load so the first button appears in the page center
+    // (the next button will sit to the right)
+    scrollToIndex(0);
+
     // update active initially and after scrolling stops
     updateActive(container);
     let scrollTimer = null;
