@@ -20,6 +20,18 @@ document.getElementById("signup-form").addEventListener("submit", function (e) {
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
+            const user = userCredential.user;
+
+            // ⭐ ADD THIS: Send verification email
+            user.sendEmailVerification()
+                .then(() => {
+                    alert("Verification email sent! Please check your inbox before logging in.");
+                })
+                .catch((error) => {
+                    alert("Error sending verification email: " + error.message);
+                });
+
+            // Optional: redirect after sending email
             window.location.href = "index.html";
         })
         .catch((error) => {
@@ -30,4 +42,5 @@ document.getElementById("signup-form").addEventListener("submit", function (e) {
             }
         });
 });
+
 
