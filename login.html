@@ -10,20 +10,24 @@
     
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <a href="index.html" class="back-button">← Back</a>
-    </header>
-    <div class="header-content">
-    <h2>Log In</h2>
-    <form id="login-form">  
-        <input type="email" id="email" placeholder="Enter your email" required>
-        <input type="password" id="password" placeholder="Enter your password" required>
-        <button type="submit">Log In</button>
-    </form>
-    </div>
+<body class="login-page">
+  <header>
+    <a href="index.html" class="back-button">← Back</a>
+  </header>
 
-    <script type="module" src="login.js"></script> 
+  <main>
+    <div class="auth-panel">
+      <h2>Log In</h2>
+
+      <form id="login-form" class="auth-form">
+        <input type="email" id="email" placeholder="Enter your email" required />
+        <input type="password" id="password" placeholder="Enter your password" required />
+        <button type="submit" class="primary-button">Log In</button>
+      </form>
+    </div>
+  </main>
+
+  <script type="module" src="login.js"></script>
 </body>
 </html>
 
