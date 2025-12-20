@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Log In - Astronish</title>
+  <title>Choose a Username - Astronish</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body class="auth-page">
   <header>
     <a href="index.html" class="back-button">← Back</a>
@@ -15,21 +13,18 @@
 
   <main>
     <div class="auth-panel">
-      <h2>Log In</h2>
-      <form id="login-form" class="auth-form">
-        <input type="email" id="email" placeholder="Enter your email" required />
-        <input type="password" id="password" placeholder="Enter your password" required />
-        <button type="submit" class="primary-button">Log In</button>
-        <a href="#" id="forgotPassword" class="primary-button">Forgot Password?</a>
+      <h2>Choose a username</h2>
+      <form id="username-form" class="auth-form">
+        <input id="username" type="text" required placeholder="Enter a username" />
+        <button type="submit" class="primary-button">Save username</button>
       </form>
     </div>
   </main>
 
-
+  <!-- Firebase SDKs then central + page JS -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
   <script src="script.js"></script>
-  <script src="login.js"></script>
+  <script src="username.js"></script>
 </body>
 </html>
-

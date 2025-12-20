@@ -1,12 +1,29 @@
+const ROUTE_MAP = {
+  astronomy: '/astronomy.html',
+  astrophysics: '/astrophysics.html',
+  signup: '/signup.html',
+  login: '/login.html',
+  username: '/username.html',
+  home: '/index.html'
+};
+const ALLOWED_PATHS = new Set(Object.values(ROUTE_MAP));
 
-function navigateTo(page) {
-    window.location.href = page;
+function safeNavigate(target) {
+  const path = ROUTE_MAP[target] || String(target || '');
+  try {
+    const url = new URL(path, window.location.origin);
+    if (url.origin === window.location.origin && ALLOWED_PATHS.has(url.pathname)) {
+      window.location.href = url.pathname;
+      return;
+    }
+  } catch (e) { /* ignore */ }
+  console.warn('Blocked unsafe navigation to:', target);
+  window.location.href = '/index.html';
 }
+window.safeNavigate = safeNavigate;
 
-
-function goBack() {
-    window.history.back();
-}
+function navigateTo(page) { safeNavigate(page); }
+function goBack() { window.history.back(); }
 
 const firebaseConfig = {
   apiKey: "AIzaSyDdsM6Y0XSIuB24w5P0wQT5JvTxkr4QV2Y",
@@ -18,36 +35,72 @@ const firebaseConfig = {
   measurementId: "G-X41L76SELD"
 };
 
+// initialize Firebase only once
+if (window.firebase && (!firebase.apps || !firebase.apps.length)) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-firebase.initializeApp(firebaseConfig);
+function handleAuthState(user) {
+  const welcomeEl = document.getElementById('welcomeMessage');
+  const signupLink = document.getElementById('signupLink');
+  const loginLink = document.getElementById('loginLink');
+  const userArea = document.getElementById('user-area');
 
-firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    let displayName = user.displayName;
-    if (!displayName && user.email) {
-      displayName = user.email.split('@')[0];
-    }
-    const welcomeEl = document.getElementById('welcomeMessage');
-    if (welcomeEl) {
-      welcomeEl.textContent = `Welcome, ${displayName}`;
+    const name = user.displayName || (user.email ? user.email.split('@')[0] : 'User');
+    if (welcomeEl) welcomeEl.textContent = `Welcome, ${name}`;
+    if (signupLink) signupLink.style.display = 'none';
+    if (loginLink) loginLink.style.display = 'none';
+
+    if (userArea) {
+      userArea.innerHTML = '';
+      const avatarBtn = document.createElement('button');
+      avatarBtn.className = 'user-avatar';
+      avatarBtn.type = 'button';
+      if (user.photoURL) {
+        const img = document.createElement('img');
+        img.src = user.photoURL;
+        img.alt = name;
+        avatarBtn.appendChild(img);
+      } else {
+        avatarBtn.textContent = name.charAt(0).toUpperCase();
+      }
+
+      const menu = document.createElement('div');
+      menu.className = 'user-menu hidden';
+      menu.innerHTML = '<button id="editProfile" type="button">Edit Profile</button><button id="signOut" type="button">Sign Out</button>';
+
+      userArea.appendChild(avatarBtn);
+      userArea.appendChild(menu);
+
+      avatarBtn.addEventListener('click', () => menu.classList.toggle('hidden'));
+
+      const signOutBtn = menu.querySelector('#signOut');
+      const editBtn = menu.querySelector('#editProfile');
+      if (signOutBtn) signOutBtn.addEventListener('click', async () => { await firebase.auth().signOut(); safeNavigate('home'); });
+      if (editBtn) editBtn.addEventListener('click', () => { safeNavigate('username'); });
     }
   } else {
-    // User not logged in, you can clear the message or redirect
-    const welcomeEl = document.getElementById('welcomeMessage');
-    if (welcomeEl) {
-      welcomeEl.textContent = '';
-    }
- 
+    if (welcomeEl) welcomeEl.textContent = '';
+    if (signupLink) signupLink.style.display = '';
+    if (loginLink) loginLink.style.display = '';
+    const ua = document.getElementById('user-area');
+    if (ua) ua.innerHTML = '';
   }
-});
+}
 
+// register listener (only if firebase is present)
+if (window.firebase) {
+  firebase.auth().onAuthStateChanged(handleAuthState);
+}
+
+// DOM ready: init carousel + arrow handling
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.button-container').forEach(container => {
     const children = () => Array.from(container.querySelectorAll('.button-wrapper'));
 
     function getCenteredIndex() {
-      const items = children();
-      if (!items.length) return 0;
+      const items = children(); if (!items.length) return 0;
       const center = container.scrollLeft + container.clientWidth / 2;
       let best = 0, bestDist = Infinity;
       items.forEach((it, i) => {
@@ -59,68 +112,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function scrollToIndex(i) {
-      const items = children();
-      if (!items.length) return;
+      const items = children(); if (!items.length) return;
       i = Math.max(0, Math.min(items.length - 1, i));
-      items[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      // update active after smooth scroll (give it a moment)
-      setTimeout(() => updateActive(container), 320);
+      items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+      setTimeout(updateActive, 360);
     }
 
-    function updateActive(containerEl) {
-      const items = children();
-      if (!items.length) return;
-      const center = containerEl.scrollLeft + containerEl.clientWidth / 2;
-      let best = 0, bestDist = Infinity;
-      items.forEach((it, i) => {
-        const itCenter = it.offsetLeft + it.offsetWidth / 2;
-        const d = Math.abs(itCenter - center);
-        if (d < bestDist) { bestDist = d; best = i; }
-      });
-      items.forEach((it, i) => it.classList.toggle('active', i === best));
+    function updateActive() {
+      const items = children(); if (!items.length) return;
+      const idx = getCenteredIndex();
+      items.forEach((it, i) => it.classList.toggle('active', i === idx));
     }
 
-    // wire prev/next buttons (assumes .carousel-prev/.carousel-next sit in parent wrapper)
-    const parent = container.parentElement;
-    const prevBtn = parent ? parent.querySelector('.carousel-prev') : null;
-    const nextBtn = parent ? parent.querySelector('.carousel-next') : null;
+    if (children().length) scrollToIndex(0);
+    updateActive();
 
-    if (nextBtn) nextBtn.addEventListener('click', () => scrollToIndex(getCenteredIndex() + 1));
-    if (prevBtn) prevBtn.addEventListener('click', () => scrollToIndex(getCenteredIndex() - 1));
-
-    // center the first item on load so the first button appears in the page center
-    // (the next button will sit to the right)
-    scrollToIndex(0);
-
-    // update active initially and after scrolling stops
-    updateActive(container);
     let scrollTimer = null;
     container.addEventListener('scroll', () => {
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => updateActive(container), 100);
+      scrollTimer = setTimeout(updateActive, 120);
     });
 
-    // keyboard arrow support when focused
-    container.tabIndex = 0;
+    if (!container.hasAttribute('tabindex')) container.tabIndex = 0;
     container.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(getCenteredIndex() + 1); }
       if (e.key === 'ArrowLeft')  { e.preventDefault(); scrollToIndex(getCenteredIndex() - 1); }
     });
   });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-  function scrollContainerToIndex(container, targetIndex) {
-    const items = Array.from(container.querySelectorAll('.button-wrapper'));
-    if (!items.length) return;
-    const i = Math.max(0, Math.min(items.length - 1, targetIndex));
-    items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
-    // mark active after animation
-    setTimeout(() => {
-      items.forEach((it, idx) => it.classList.toggle('active', idx === i));
-    }, 320);
-  }
-
+  // arrow click handler (global)
   document.addEventListener('click', (e) => {
     const nextBtn = e.target.closest('.carousel-next');
     const prevBtn = e.target.closest('.carousel-prev');
@@ -131,8 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = wrap.querySelector('.button-container');
     if (!container) return;
 
-    // compute current centered index
     const items = Array.from(container.querySelectorAll('.button-wrapper'));
+    if (!items.length) return;
+
     const center = container.scrollLeft + container.clientWidth / 2;
     let best = 0, bestDist = Infinity;
     items.forEach((it, i) => {
@@ -142,6 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const target = nextBtn ? best + 1 : best - 1;
-    scrollContainerToIndex(container, target);
+    const i = Math.max(0, Math.min(items.length - 1, target));
+    items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    setTimeout(() => items.forEach((it, idx) => it.classList.toggle('active', idx === i)), 360);
   });
 });
