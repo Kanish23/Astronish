@@ -1,17 +1,29 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyDdsM6Y0XSIuB24w5P0wQT5JvTxkr4QV2Y",
-  authDomain: "astronish-bd18d.firebaseapp.com",
-  projectId: "astronish-bd18d",
-  storageBucket: "astronish-bd18d.firebasestorage.app",
-  messagingSenderId: "232257360387",
-  appId: "1:232257360387:web:fd9f82a09f585df6a33436",
-  measurementId: "G-X41L76SELD"
-};
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.firebase) return;
 
+  const form = document.getElementById('signup-form');
+  if (!form) return;
 
-firebase.initializeApp(firebaseConfig);
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email')?.value?.trim();
+    const password = document.getElementById('password')?.value;
+    if (!email || !password) return alert('Please enter email and password');
 
-// Sign Up Function
+    try {
+      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      if (user && user.sendEmailVerification) user.sendEmailVerification().catch(() => {});
+      if (typeof safeNavigate === 'function') safeNavigate('username'); else window.location.href = 'username.html';
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') alert('This email is already in use. Try logging in.');
+      else alert(err.message || 'Sign up failed');
+    }
+  });
+});
+
+/* Old Code(backup)
 document.getElementById("signup-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -32,7 +44,7 @@ document.getElementById("signup-form").addEventListener("submit", function (e) {
                 });
 
             // Optional: redirect after sending email
-            window.location.href = "index.html";
+            window.location.href = "username.html";
         })
         .catch((error) => {
             if (error.code === "auth/email-already-in-use") {
@@ -41,6 +53,6 @@ document.getElementById("signup-form").addEventListener("submit", function (e) {
                 alert("Error: " + error.message);
             }
         });
-});
+}); */
 
 

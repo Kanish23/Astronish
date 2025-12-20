@@ -1,17 +1,49 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyDdsM6Y0XSIuB24w5P0wQT5JvTxkr4QV2Y",
-  authDomain: "astronish-bd18d.firebaseapp.com",
-  projectId: "astronish-bd18d",
-  storageBucket: "astronish-bd18d.firebasestorage.app",
-  messagingSenderId: "232257360387",
-  appId: "1:232257360387:web:fd9f82a09f585df6a33436",
-  measurementId: "G-X41L76SELD"
-};
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.firebase) return;
 
+  const form = document.getElementById('login-form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email')?.value?.trim();
+      const password = document.getElementById('password')?.value;
+      if (!email || !password) return alert('Please enter email and password');
 
-firebase.initializeApp(firebaseConfig);
+      try {
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        if (user && user.emailVerified === false) {
+          alert('Please verify your email before logging in.');
+          await firebase.auth().signOut();
+          return;
+        }
+        if (typeof safeNavigate === 'function') safeNavigate('home'); else window.location.href = 'index.html';
+      } catch (err) {
+        console.error(err);
+        if (err.code === 'auth/user-not-found') alert('User not found.');
+        else if (err.code === 'auth/wrong-password') alert('Incorrect password.');
+        else alert(err.message || 'Login failed');
+      }
+    });
+  }
 
-// Login Function
+  const forgot = document.getElementById('forgotPassword');
+  if (forgot) {
+    forgot.addEventListener('click', async () => {
+      const email = prompt('Enter your email to reset your password:');
+      if (!email) return;
+      try {
+        await firebase.auth().sendPasswordResetEmail(email);
+        alert('Password reset email sent!');
+      } catch (err) {
+        console.error(err);
+        alert(err.message || 'Failed to send reset email');
+      }
+    });
+  }
+});
+
+/* Old
 document.getElementById("login-form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -57,7 +89,7 @@ document.getElementById("forgotPassword").addEventListener("click", function () 
         .catch((error) => {
             alert(error.message);
         });
-});
+}); */
 
 
 
