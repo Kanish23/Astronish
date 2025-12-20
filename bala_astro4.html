@@ -1,0 +1,180 @@
+<script>
+    const originalPlanets = [
+        { name: "Telescope", image: "images/telescope1.jpeg?text=Telescope", url: "telescope1.html"},
+        { name: "Position Calculation", image: "images/starmap.jpg?text=Position Calculation", url: "position_calculation.html"},
+        { name: "Stars", image: "images/sun.jpg?text=Stars", url: "stars.html"},
+        { name: "Galaxies", image: "images/galaxy1.jpg?text=Galaxies", url: "galaxies.html"},
+        { name: "Cosmology", image: "images/ultrawide.jpg?text=Cosmology", url: "cosmology.html"},
+    ];
+
+    // Create a mirrored array for seamless looping: [tail] + [original] + [head]
+    const numOriginal = originalPlanets.length;
+    const itemsToMirror = 3; // Number of items to duplicate on each side for the effect
+    const mirroredPlanets = [
+        ...originalPlanets.slice(-itemsToMirror), // Tail (for moving left)
+        ...originalPlanets,                      // Original
+        ...originalPlanets.slice(0, itemsToMirror) // Head (for moving right)
+    ];
+
+    const carouselTrack = document.getElementById('carousel-track');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const dotsContainer = document.getElementById('dots-container');
+
+    let autoScrollInterval;
+    const scrollSpeed = 3000; // Scroll every 3 seconds
+    
+    // Start index in the middle of the first mirrored section (index of the first original item)
+    let currentIndex = itemsToMirror; 
+
+    function renderPlanets() {
+        carouselTrack.innerHTML = '';
+        mirroredPlanets.forEach((planet, index) => {
+            const planetItem = document.createElement('div');
+            planetItem.classList.add('planet-item');
+            
+            const img = document.createElement('img');
+            // Fix: Remove the 'src=' from the image property value
+            img.src = planet.image.replace("src=", "").trim(); 
+            img.alt = planet.name;
+            img.classList.add('planet-image');
+            
+            // 1. **ADD THE NAME ELEMENT**
+            const nameDiv = document.createElement('div');
+            nameDiv.classList.add('planet-name');
+            nameDiv.textContent = planet.name;
+
+            planetItem.appendChild(img);
+            planetItem.appendChild(nameDiv); // Append the name
+            
+            // Only add click listener to the *original* items (not the mirrored ones)
+            if (index >= itemsToMirror && index < (itemsToMirror + numOriginal)) {
+                 planetItem.addEventListener('click', () => {
+                    window.location.href = planet.url;
+                });
+            }
+
+            carouselTrack.appendChild(planetItem);
+        });
+        
+        createDots();
+        updateCarousel();
+        startAutoScroll();
+    }
+
+    function createDots() {
+        dotsContainer.innerHTML = '';
+        originalPlanets.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            // Highlight the dot corresponding to the current original planet
+            if ((currentIndex - itemsToMirror) === index) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => {
+                // Adjust index to point to the correct position in the mirrored array
+                currentIndex = index + itemsToMirror; 
+                updateCarousel();
+                stopAutoScroll();
+            });
+            dotsContainer.appendChild(dot);
+        });
+    }
+
+    function updateCarousel() {
+        const containerWidth = carouselTrack.parentElement.offsetWidth;
+        // Calculate item width: 150px image + 2rem (32px) total margin
+        const itemWidth = 150 + 32; 
+        const offset = (containerWidth / 2) - (itemWidth / 2) - (currentIndex * itemWidth);
+        carouselTrack.style.transform = `translateX(${offset}px)`;
+        
+        updateHighlightsAndDots();
+        handleRecenter(); // Check for loop
+    }
+    
+    // 2. **IMPLEMENT CIRCULAR LOGIC (Recenter)**
+    function handleRecenter() {
+        let newIndex = currentIndex;
+        let recenter = false;
+        
+        // If we've moved into the mirrored "head" (right side)
+        if (currentIndex >= (numOriginal + itemsToMirror)) {
+            newIndex = currentIndex - numOriginal;
+            recenter = true;
+        } 
+        // If we've moved into the mirrored "tail" (left side)
+        else if (currentIndex < itemsToMirror) {
+            newIndex = currentIndex + numOriginal;
+            recenter = true;
+        }
+
+        if (recenter) {
+            // Instantly jump to the new index (no transition)
+            carouselTrack.style.transition = 'none';
+            currentIndex = newIndex;
+            
+            // Re-calculate and apply the new offset
+            const containerWidth = carouselTrack.parentElement.offsetWidth;
+            const itemWidth = 150 + 32; 
+            const offset = (containerWidth / 2) - (itemWidth / 2) - (currentIndex * itemWidth);
+            carouselTrack.style.transform = `translateX(${offset}px)`;
+            
+            // Re-enable transition for the next movement
+            requestAnimationFrame(() => {
+                carouselTrack.style.transition = 'transform 0.5s ease-in-out';
+            });
+        }
+    }
+
+
+    function startAutoScroll() {
+        stopAutoScroll(); // Clear any existing interval
+        autoScrollInterval = setInterval(() => {
+            currentIndex++;
+            updateCarousel();
+        }, scrollSpeed);
+    }
+
+    function stopAutoScroll() {
+        clearInterval(autoScrollInterval);
+    }
+
+    function updateHighlightsAndDots() {
+        document.querySelectorAll('.planet-item').forEach((item, index) => {
+            // Only highlight if it's one of the *original* items
+            if (index === currentIndex) {
+                item.classList.add('highlighted');
+            } else {
+                item.classList.remove('highlighted');
+            }
+        });
+        
+        // The active dot corresponds to the index of the ORIGINAL array
+        const dotIndex = (currentIndex - itemsToMirror) % numOriginal; 
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            if (index === dotIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    nextBtn.addEventListener('click', () => {
+        stopAutoScroll();
+        currentIndex++;
+        updateCarousel();
+        // Resume auto-scroll after the animation completes
+        setTimeout(startAutoScroll, 500); 
+    });
+
+    prevBtn.addEventListener('click', () => {
+        stopAutoScroll();
+        currentIndex--;
+        updateCarousel();
+        // Resume auto-scroll after the animation completes
+        setTimeout(startAutoScroll, 500); 
+    });
+
+    window.onload = renderPlanets;
+</script>
