@@ -1,10 +1,10 @@
 const ROUTE_MAP = {
-  astronomy: '/astronomy.html',
-  astrophysics: '/astrophysics.html',
-  signup: '/signup.html',
-  login: '/login.html',
-  username: '/username.html',
-  home: '/index.html'
+  astronomy: 'astronomy.html',
+  astrophysics: 'astrophysics.html',
+  signup: 'signup.html',
+  login: 'login.html',
+  username: 'username.html',
+  home: 'index.html'
 };
 const ALLOWED_PATHS = new Set(Object.values(ROUTE_MAP));
 
@@ -167,4 +167,5 @@ document.addEventListener('DOMContentLoaded', () => {
     items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
     setTimeout(() => items.forEach((it, idx) => it.classList.toggle('active', idx === i)), 360);
   });
+
 });
