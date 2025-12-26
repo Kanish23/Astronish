@@ -1,10 +1,10 @@
 const ROUTE_MAP = {
-  astronomy: '/astronomy.html',
-  astrophysics: '/astrophysics.html',
-  signup: '/signup.html',
-  login: '/login.html',
-  username: '/username.html',
-  home: '/index.html'
+  astronomy: '/Astronish/astronomy.html',
+  astrophysics: '/Astronish/astrophysics.html',
+  signup: '/Astronish/signup.html',
+  login: '/Astronish/login.html',
+  username: '/Astronish/username.html',
+  home: '/Astronish/index.html'
 };
 const ALLOWED_PATHS = new Set(Object.values(ROUTE_MAP));
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container.hasAttribute('tabindex')) container.tabIndex = 0;
     container.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(getCenteredIndex() + 1); }
-      if (e.key === 'ArrowLeft')  { e.preventDefault(); scrollToIndex(getCenteredIndex() - 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); scrollToIndex(getCenteredIndex() - 1); }
     });
   });
 
