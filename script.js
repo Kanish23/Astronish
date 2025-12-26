@@ -72,7 +72,14 @@ function handleAuthState(user) {
 
       const menu = document.createElement('div');
       menu.className = 'user-menu hidden';
-      menu.innerHTML = '<button id="editProfile" type="button">Edit Profile</button><button id="signOut" type="button">Sign Out</button>';
+
+      // Use existing global button styles (or simple cleaner text buttons as per CSS)
+      // User wanted reuse of existing classes. "primary-button" might be too big for menu, 
+      // but we can add specific classes if needed or just use the styled button from CSS.
+      menu.innerHTML = `
+        <button id="editProfile" type="button">Edit Profile</button>
+        <button id="signOut" type="button">Sign Out</button>
+      `;
 
       userArea.appendChild(avatarBtn);
       userArea.appendChild(menu);

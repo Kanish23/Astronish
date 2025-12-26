@@ -33,7 +33,7 @@ body {
 .top-bar-bg {
   position: static;
   height: 120px;
-  background-color: rgba(128,128,128,0.12);
+  background-color: rgba(128, 128, 128, 0.12);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
@@ -69,6 +69,7 @@ header {
   width: 55px;
   height: auto;
 }
+
 .logo img {
   width: 100%;
   height: auto;
@@ -78,7 +79,7 @@ header {
 /* Gradient text for headings and paragraphs in main section */
 .main-section h1,
 .main-section p {
-  background: linear-gradient(90deg, orange, rgb(138,101,219), #ff9501);
+  background: linear-gradient(90deg, orange, rgb(138, 101, 219), #ff9501);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -95,6 +96,7 @@ nav ul {
   margin: 0;
   padding: 0;
 }
+
 nav ul li a {
   text-decoration: none;
   color: orange;
@@ -106,11 +108,12 @@ nav ul li a {
   transition: background-color 0.25s ease, color 0.2s ease;
   outline: none;
 }
+
 nav ul li a:hover,
 nav ul li a:focus-visible {
   background-color: orange;
   color: black;
-  box-shadow: 0 0 0 4px rgba(255,150,0,0.12);
+  box-shadow: 0 0 0 4px rgba(255, 150, 0, 0.12);
 }
 
 /* Button carousel (outer wrapper) */
@@ -128,7 +131,8 @@ nav ul li a:focus-visible {
   gap: 24px;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px 35vw; /* Large padding to allow first/last items to be centered */
+  padding: 20px 35vw;
+  /* Large padding to allow first/last items to be centered */
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -136,7 +140,10 @@ nav ul li a:focus-visible {
   width: 100%;
   box-sizing: border-box;
 }
-.button-container::-webkit-scrollbar { display: none; }
+
+.button-container::-webkit-scrollbar {
+  display: none;
+}
 
 /* Each item wrapper (prevents stretching, enables snapping) */
 .button-wrapper {
@@ -162,22 +169,26 @@ nav ul li a:focus-visible {
   background-position: center;
   border: none;
   cursor: pointer;
-  transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 240ms ease, box-shadow 180ms, filter 240ms;
+  transition: transform 280ms cubic-bezier(.2, .9, .2, 1), opacity 240ms ease, box-shadow 180ms, filter 240ms;
   transform: scale(0.85);
   opacity: 0.5;
-  filter: grayscale(80%); /* Grey out unselected */
+  filter: grayscale(80%);
+  /* Grey out unselected */
   color: #fff;
   font-weight: 700;
-  pointer-events: none; /* Disable click by default */
+  pointer-events: none;
+  /* Disable click by default */
 }
 
 /* Active (centered) item */
 .button-wrapper.active .btn {
-  transform: scale(1.1); /* Slightly larger */
+  transform: scale(1.1);
+  /* Slightly larger */
   opacity: 1;
   filter: grayscale(0%);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
-  pointer-events: auto; /* Enable click only for active */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+  /* Enable click only for active */
   cursor: pointer;
 }
 
@@ -197,28 +208,44 @@ nav ul li a:focus-visible {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
-.carousel-prev { left: 8px; }
-.carousel-next { right: 8px; }
+
+.carousel-prev {
+  left: 8px;
+}
+
+.carousel-next {
+  right: 8px;
+}
 
 @media (max-width: 520px) {
-  .carousel-btn { width: 36px; height: 36px; }
-  .carousel-prev { left: 6px; }
-  .carousel-next { right: 6px; }
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .carousel-prev {
+    left: 6px;
+  }
+
+  .carousel-next {
+    right: 6px;
+  }
 }
 
 /* Specific backgrounds for first two buttons (adjust / add more as needed) */
 .button-wrapper:first-child .btn {
   background-image: url('images/astronomy5.jpg');
 }
+
 .button-wrapper:nth-child(2) .btn {
   background-image: url('images/astrophysics.jpg');
 }
@@ -238,8 +265,9 @@ nav ul li a:focus-visible {
   border-radius: 8px;
   transition: background 0.25s ease;
 }
-.back-button:hover { 
-  background-color: #cc5200; 
+
+.back-button:hover {
+  background-color: #cc5200;
 }
 
 .auth-panel {
@@ -250,7 +278,8 @@ nav ul li a:focus-visible {
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
-  align-items: flex-start; /* heading left, form fills width */
+  align-items: flex-start;
+  /* heading left, form fills width */
 }
 
 .auth-form {
@@ -265,16 +294,20 @@ nav ul li a:focus-visible {
   width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
   color: #fff;
   font-size: 1rem;
   outline: none;
 }
-.auth-form input::placeholder { color: rgba(255,255,255,0.6); }
+
+.auth-form input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .auth-form input:focus {
-  box-shadow: 0 0 0 4px rgba(255,150,0,0.08);
-  border-color: rgba(255,150,0,0.6);
+  box-shadow: 0 0 0 4px rgba(255, 150, 0, 0.08);
+  border-color: rgba(255, 150, 0, 0.6);
 }
 
 /* Primary button — in-flow, styled like the back button */
@@ -290,8 +323,15 @@ nav ul li a:focus-visible {
   width: 100%;
   text-align: center;
 }
-.primary-button:hover { background-color: #cc5200; transform: translateY(-1px); }
-.primary-button:active { transform: translateY(0); }
+
+.primary-button:hover {
+  background-color: #cc5200;
+  transform: translateY(-1px);
+}
+
+.primary-button:active {
+  transform: translateY(0);
+}
 
 /* ensure header/back-button don't overlap the auth panel */
 .auth-page header {
@@ -339,26 +379,143 @@ nav ul li a:focus-visible {
   background: radial-gradient(circle at 30% 30%, #ffe066, #ff9501 70%, #b8860b 100%);
   color: #fff;
   border: none;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.topic-box:hover { transform: scale(1.05); }
+
+.topic-box:hover {
+  transform: scale(1.05);
+}
 
 /* Astronomy topic boxes (per-page overrides) */
-.astronomy-topics .astronomy-topic:nth-child(1) { background-image: url('images/telescope1.jpeg'); background-size: cover; }
-.astronomy-topics .astronomy-topic:nth-child(2) { background-image: url('images/starmap.jpg'); background-size: cover; }
-.astronomy-topics .astronomy-topic:nth-child(3) { background-image: url('images/sun.jpg'); background-size: cover; }
-.astronomy-topics .astronomy-topic:nth-child(4) { background-image: url('images/galaxy1.jpg'); background-size: cover; }
-.astronomy-topics .astronomy-topic:nth-child(5) { background-image: url('images/ultrawide.jpg'); background-size: cover; }
+.astronomy-topics .astronomy-topic:nth-child(1) {
+  background-image: url('images/telescope1.jpeg');
+  background-size: cover;
+}
+
+.astronomy-topics .astronomy-topic:nth-child(2) {
+  background-image: url('images/starmap.jpg');
+  background-size: cover;
+}
+
+.astronomy-topics .astronomy-topic:nth-child(3) {
+  background-image: url('images/sun.jpg');
+  background-size: cover;
+}
+
+.astronomy-topics .astronomy-topic:nth-child(4) {
+  background-image: url('images/galaxy1.jpg');
+  background-size: cover;
+}
+
+.astronomy-topics .astronomy-topic:nth-child(5) {
+  background-image: url('images/ultrawide.jpg');
+  background-size: cover;
+}
 
 /* Astrophysics topic boxes */
-.astrophysics-topics .astrophysics-topic:nth-child(1) { background-image: url('images/nebula.jpg'); background-size: cover; }
-.astrophysics-topics .astrophysics-topic:nth-child(2) { background-image: url('images/orion.jpg'); background-size: cover; }
-.astrophysics-topics .astrophysics-topic:nth-child(3) { background-image: url('images/supernova.jpg'); background-size: cover; }
-.astrophysics-topics .astrophysics-topic:nth-child(4) { background-image: url('images/guyfloating.jpg'); background-size: cover; }
-.astrophysics-topics .astrophysics-topic:nth-child(5) { background-image: url('images/southernring.png'); background-size: cover; }
+.astrophysics-topics .astrophysics-topic:nth-child(1) {
+  background-image: url('images/nebula.jpg');
+  background-size: cover;
+}
+
+.astrophysics-topics .astrophysics-topic:nth-child(2) {
+  background-image: url('images/orion.jpg');
+  background-size: cover;
+}
+
+.astrophysics-topics .astrophysics-topic:nth-child(3) {
+  background-image: url('images/supernova.jpg');
+  background-size: cover;
+}
+
+.astrophysics-topics .astrophysics-topic:nth-child(4) {
+  background-image: url('images/guyfloating.jpg');
+  background-size: cover;
+}
+
+.astrophysics-topics .astrophysics-topic:nth-child(5) {
+  background-image: url('images/southernring.png');
+  background-size: cover;
+}
 
 /* Small utility tweaks */
-.hidden { display: none !important; }
-.center { margin-left: auto; margin-right: auto; }
+.hidden {
+  display: none !important;
+}
+
+/* User Profile Styles */
+.user-avatar {
+  background-color: #ff9501;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  overflow: hidden;
+  /* Mask square images */
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 0;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(255, 150, 0, 0.3);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.user-menu {
+  position: absolute;
+  top: 60px;
+  /* Below the header */
+  right: 20px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+  width: 200px;
+}
+
+.user-menu.hidden {
+  display: none;
+}
+
+.user-menu button {
+  padding: 10px;
+  text-align: left;
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.user-menu button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Re-use primary styling for prominent action if desired, 
+   but user requested using GLOBAL classes. 
+   We will rely on specific selectors in JS or here. */

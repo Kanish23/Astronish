@@ -17,12 +17,32 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = input?.value?.trim();
       if (!name) return alert('Please enter a username');
 
+      const fileInput = document.getElementById('profile-pic');
+      const file = fileInput?.files?.[0];
+      let photoURL = user.photoURL;
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+
       try {
-        await user.updateProfile({ displayName: name });
+        // Upload image if selected
+        if (file) {
+          const storageRef = firebase.storage().ref();
+          const fileRef = storageRef.child(`users/${user.uid}/profile_${Date.now()}`);
+          await fileRef.put(file);
+          photoURL = await fileRef.getDownloadURL();
+        }
+
+        await user.updateProfile({
+          displayName: name,
+          photoURL: photoURL
+        });
+
         if (typeof safeNavigate === 'function') safeNavigate('home'); else window.location.href = 'index.html';
       } catch (err) {
         console.error(err);
-        alert(err.message || 'Failed to set username');
+        alert(err.message || 'Failed to update profile');
+        if (submitBtn) submitBtn.disabled = false;
       }
     });
   });
