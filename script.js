@@ -1,28 +1,22 @@
 const ROUTE_MAP = {
-  astronomy: '/Astronish/astronomy.html',
-  astrophysics: '/Astronish/astrophysics.html',
-  signup: '/Astronish/signup.html',
-  login: '/Astronish/login.html',
-  username: '/Astronish/username.html',
-  home: '/Astronish/index.html'
+  astronomy: 'astronomy.html',
+  astrophysics: 'astrophysics.html',
+  signup: 'signup.html',
+  login: 'login.html',
+  username: 'username.html',
+  home: 'index.html'
 };
 const ALLOWED_PATHS = new Set(Object.values(ROUTE_MAP));
 
 function safeNavigate(target) {
-  const path = ROUTE_MAP[target] || String(target || '');
-  try {
-    const url = new URL(path, window.location.origin);
-    if (url.origin === window.location.origin && ALLOWED_PATHS.has(url.pathname)) {
-      window.location.href = url.pathname;
-      return;
-    }
-  } catch (e) { /* ignore */ }
+  const path = ROUTE_MAP[target];
+  if (path) {
+    window.location.href = path;
+    return;
+  }
   console.warn('Blocked unsafe navigation to:', target);
-  window.location.href = '/index.html';
+  window.location.href = 'index.html';
 }
-window.safeNavigate = safeNavigate;
-
-function navigateTo(page) { safeNavigate(page); }
 function goBack() { window.history.back(); }
 
 const firebaseConfig = {
