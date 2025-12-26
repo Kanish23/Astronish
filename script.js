@@ -10,7 +10,10 @@ const ALLOWED_PATHS = new Set(Object.values(ROUTE_MAP));
 
 function safeNavigate(target) {
   const path = ROUTE_MAP[target];
+  // DEBUG: Remove after fixing
+  alert(`Debug: target="${target}", path="${path}"`);
   if (path) {
+    console.log(`Navigating to ${path}`);
     window.location.href = path;
     return;
   }
