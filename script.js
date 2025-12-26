@@ -17,6 +17,9 @@ function safeNavigate(target) {
   console.warn('Blocked unsafe navigation to:', target);
   window.location.href = 'index.html';
 }
+window.safeNavigate = safeNavigate;
+
+function navigateTo(page) { safeNavigate(page); }
 function goBack() { window.history.back(); }
 
 const firebaseConfig = {
