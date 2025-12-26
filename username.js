@@ -14,11 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      alert('Submit handler triggered!'); // DEBUG: Confirm event fires
+
       const name = input?.value?.trim();
       if (!name) return alert('Please enter a username');
 
       const fileInput = document.getElementById('profile-pic');
       const file = fileInput?.files?.[0];
+      alert(`File selected: ${file ? file.name : 'None'}`); // DEBUG: Confirm file selection
+
       let photoURL = user.photoURL;
 
       const submitBtn = form.querySelector('button[type="submit"]');
@@ -27,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         // Upload image if selected
         if (file) {
+          if (!firebase.storage) throw new Error('Firebase Storage SDK not loaded');
           alert('Starting upload... (Debug)');
           const storageRef = firebase.storage().ref();
           const fileRef = storageRef.child(`users/${user.uid}/profile_${Date.now()}`);
