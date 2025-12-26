@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Choose a Username - Astronish</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body class="auth-page">
   <header>
     <a href="index.html" class="back-button">← Back</a>
@@ -15,8 +17,12 @@
     <div class="auth-panel">
       <h2>Choose a username</h2>
       <form id="username-form" class="auth-form">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <label for="profile-pic" style="color:#ccc; font-size:0.9rem;">Profile Picture (optional)</label>
+          <input id="profile-pic" type="file" accept="image/*" style="color:white;" />
+        </div>
         <input id="username" type="text" required placeholder="Enter a username" />
-        <button type="submit" class="primary-button">Save username</button>
+        <button type="submit" class="primary-button">Save Profile</button>
       </form>
     </div>
   </main>
@@ -24,7 +30,9 @@
   <!-- Firebase SDKs then central + page JS -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
   <script src="script.js"></script>
   <script src="username.js"></script>
 </body>
+
 </html>
