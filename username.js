@@ -35,7 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
           alert('Starting upload... (Debug)');
           const storageRef = firebase.storage().ref();
           const fileRef = storageRef.child(`users/${user.uid}/profile_${Date.now()}`);
-          await fileRef.put(file);
+
+          const uploadTask = fileRef.put(file);
+
+          // await the upload task with progress monitoring
+          await new Promise((resolve, reject) => {
+            uploadTask.on('state_changed',
+              (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+              },
+              (error) => {
+                reject(error);
+              },
+              () => {
+                resolve();
+              }
+            );
+          });
+
           alert('Upload successful. Getting URL... (Debug)');
           photoURL = await fileRef.getDownloadURL();
         }
