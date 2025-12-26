@@ -27,9 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         // Upload image if selected
         if (file) {
+          alert('Starting upload... (Debug)');
           const storageRef = firebase.storage().ref();
           const fileRef = storageRef.child(`users/${user.uid}/profile_${Date.now()}`);
           await fileRef.put(file);
+          alert('Upload successful. Getting URL... (Debug)');
           photoURL = await fileRef.getDownloadURL();
         }
 
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof safeNavigate === 'function') safeNavigate('home'); else window.location.href = 'index.html';
       } catch (err) {
         console.error(err);
-        alert(err.message || 'Failed to update profile');
+        alert('Error: ' + (err.message || 'Unknown error'));
         if (submitBtn) submitBtn.disabled = false;
       }
     });
