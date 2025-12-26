@@ -167,4 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
     setTimeout(() => items.forEach((it, idx) => it.classList.toggle('active', idx === i)), 360);
   });
+
 });
+
