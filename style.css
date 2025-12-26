@@ -127,13 +127,12 @@ nav ul li a:focus-visible {
   display: flex;
   gap: 24px;
   align-items: center;
-  justify-content: flex-start; /* flow from left so first item can be centered programmatically */
-  padding: 20px 36px;
+  justify-content: flex-start;
+  padding: 20px 35vw; /* Large padding to allow first/last items to be centered */
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* firefox */
-  scroll-padding-inline: 50%;
+  scrollbar-width: none;
   width: 100%;
   box-sizing: border-box;
 }
@@ -148,6 +147,7 @@ nav ul li a:focus-visible {
   justify-content: center;
   align-items: center;
   text-align: center;
+  transition: opacity 0.3s;
 }
 
 /* Circular responsive button (single definition) */
@@ -162,25 +162,29 @@ nav ul li a:focus-visible {
   background-position: center;
   border: none;
   cursor: pointer;
-  transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 240ms ease, box-shadow 180ms;
+  transition: transform 280ms cubic-bezier(.2,.9,.2,1), opacity 240ms ease, box-shadow 180ms, filter 240ms;
   transform: scale(0.85);
-  opacity: 0.55;
+  opacity: 0.5;
+  filter: grayscale(80%); /* Grey out unselected */
   color: #fff;
   font-weight: 700;
+  pointer-events: none; /* Disable click by default */
 }
 
 /* Active (centered) item */
 .button-wrapper.active .btn {
-  transform: scale(1);
+  transform: scale(1.1); /* Slightly larger */
   opacity: 1;
+  filter: grayscale(0%);
   box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  pointer-events: auto; /* Enable click only for active */
+  cursor: pointer;
 }
 
-/* Hover / focus */
-.button-wrapper .btn:focus,
-.button-wrapper .btn:hover {
-  transform: scale(1.03);
-  opacity: 1;
+/* Hover / focus (only for active) */
+.button-wrapper.active .btn:focus,
+.button-wrapper.active .btn:hover {
+  transform: scale(1.13);
 }
 
 /* Carousel arrow buttons */
