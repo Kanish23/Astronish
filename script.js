@@ -1,19 +1,23 @@
 const ROUTE_MAP = {
-  astronomy: 'astronomy.html',
+  astronomy: 'Bala_astro6.html',
   astrophysics: 'astrophysics.html',
   signup: 'signup.html',
   login: 'login.html',
   username: 'username.html',
-  home: 'index.html'
+  home: 'index.html',
+  'Bala_astro6.html': 'Bala_astro6.html'
 };
 const ALLOWED_PATHS = new Set(Object.values(ROUTE_MAP));
 
 function safeNavigate(target) {
-  const path = ROUTE_MAP[target];
-  // DEBUG: Remove after fixing
-  alert(`Debug: target="${target}", path="${path}"`);
+  let path = ROUTE_MAP[target];
+
+  // If not a key, checks if it's a direct filename that exists in our map
+  if (!path && Object.values(ROUTE_MAP).includes(target)) {
+    path = target;
+  }
+
   if (path) {
-    console.log(`Navigating to ${path}`);
     window.location.href = path;
     return;
   }
