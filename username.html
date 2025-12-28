@@ -18,8 +18,9 @@
       <h2>Choose a username</h2>
       <form id="username-form" class="auth-form">
         <div style="display:flex; flex-direction:column; gap:8px;">
-          <label for="profile-pic" style="color:#ccc; font-size:0.9rem;">Profile Picture (optional)</label>
-          <input id="profile-pic" type="file" accept="image/*" style="color:white;" />
+          <label for="profile-pic-url" style="color:#ccc; font-size:0.9rem;">Profile Picture URL (optional)</label>
+          <input id="profile-pic-url" type="url" placeholder="https://example.com/image.jpg"
+            style="width:100%; padding:8px; border-radius:4px; border:none;" />
         </div>
         <input id="username" type="text" required placeholder="Enter a username" />
         <button type="submit" class="primary-button">Save Profile</button>

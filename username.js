@@ -14,59 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alert('Submit handler triggered!'); // DEBUG: Confirm event fires
 
       const name = input?.value?.trim();
       if (!name) return alert('Please enter a username');
 
-      const fileInput = document.getElementById('profile-pic');
-      const file = fileInput?.files?.[0];
-      alert(`File selected: ${file ? file.name : 'None'}`); // DEBUG: Confirm file selection
-
-      let photoURL = user.photoURL;
+      const urlInput = document.getElementById('profile-pic-url');
+      // If URL is provided, use it. Otherwise keep existing.
+      const newPhotoURL = urlInput?.value?.trim() || user.photoURL;
 
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) submitBtn.disabled = true;
 
       try {
-        // Upload image if selected
-        if (file) {
-          if (!firebase.storage) throw new Error('Firebase Storage SDK not loaded');
-          alert('Starting upload... (Debug)');
-          const storageRef = firebase.storage().ref();
-          const fileRef = storageRef.child(`users/${user.uid}/profile_${Date.now()}`);
-
-          const uploadTask = fileRef.put(file);
-
-          // await the upload task with progress monitoring
-          await new Promise((resolve, reject) => {
-            uploadTask.on('state_changed',
-              (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-              },
-              (error) => {
-                reject(error);
-              },
-              () => {
-                resolve();
-              }
-            );
-          });
-
-          alert('Upload successful. Getting URL... (Debug)');
-          photoURL = await fileRef.getDownloadURL();
-        }
-
         await user.updateProfile({
           displayName: name,
-          photoURL: photoURL
+          photoURL: newPhotoURL
         });
 
         if (typeof safeNavigate === 'function') safeNavigate('home'); else window.location.href = 'index.html';
       } catch (err) {
         console.error(err);
-        alert('Error: ' + (err.message || 'Unknown error'));
+        alert('Error: ' + (err.message || 'Failed to update profile'));
         if (submitBtn) submitBtn.disabled = false;
       }
     });
