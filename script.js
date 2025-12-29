@@ -65,6 +65,11 @@ function handleAuthState(user) {
         const img = document.createElement('img');
         img.src = user.photoURL;
         img.alt = name;
+        img.onerror = () => {
+          // Fallback to initial if image fails to load
+          avatarBtn.innerHTML = '';
+          avatarBtn.textContent = name.charAt(0).toUpperCase();
+        };
         avatarBtn.appendChild(img);
       } else {
         avatarBtn.textContent = name.charAt(0).toUpperCase();
@@ -122,26 +127,42 @@ document.addEventListener('DOMContentLoaded', () => {
       return best;
     }
 
+    let isAnimating = false;
+
     function scrollToIndex(i) {
       const items = children(); if (!items.length) return;
       i = Math.max(0, Math.min(items.length - 1, i));
+
+      // Update state immediately for smooth simultaneous animation
+      isAnimating = true;
+      items.forEach((it, idx) => it.classList.toggle('active', idx === i));
+
       items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
-      setTimeout(updateActive, 360);
+
+      // Prevent scroll listener from interfering during animation
+      setTimeout(() => { isAnimating = false; }, 500);
     }
 
     function updateActive() {
+      if (isAnimating) return; // Skip updates during programmatic animation
       const items = children(); if (!items.length) return;
       const idx = getCenteredIndex();
       items.forEach((it, i) => it.classList.toggle('active', i === idx));
     }
 
     if (children().length) scrollToIndex(0);
-    updateActive();
+    // Initial update doesn't need to block
+    const items = children();
+    if (items.length) {
+      const idx = getCenteredIndex();
+      items.forEach((it, i) => it.classList.toggle('active', i === idx));
+    }
 
     let scrollTimer = null;
     container.addEventListener('scroll', () => {
+      if (isAnimating) return;
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(updateActive, 120);
+      scrollTimer = setTimeout(updateActive, 100);
     });
 
     if (!container.hasAttribute('tabindex')) container.tabIndex = 0;
@@ -149,34 +170,26 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(getCenteredIndex() + 1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); scrollToIndex(getCenteredIndex() - 1); }
     });
+
+    // Attach click listeners to local arrows if found
+    const wrap = container.closest('.button-container-wrap');
+    if (wrap) {
+      const prevBtn = wrap.querySelector('.carousel-prev');
+      const nextBtn = wrap.querySelector('.carousel-next');
+
+      if (prevBtn) prevBtn.addEventListener('click', () => {
+        // Find currently active or centered
+        const current = getCenteredIndex();
+        scrollToIndex(current - 1);
+      });
+
+      if (nextBtn) nextBtn.addEventListener('click', () => {
+        const current = getCenteredIndex();
+        scrollToIndex(current + 1);
+      });
+    }
   });
 
-  // arrow click handler (global)
-  document.addEventListener('click', (e) => {
-    const nextBtn = e.target.closest('.carousel-next');
-    const prevBtn = e.target.closest('.carousel-prev');
-    if (!nextBtn && !prevBtn) return;
 
-    const wrap = (nextBtn || prevBtn).closest('.button-container-wrap');
-    if (!wrap) return;
-    const container = wrap.querySelector('.button-container');
-    if (!container) return;
-
-    const items = Array.from(container.querySelectorAll('.button-wrapper'));
-    if (!items.length) return;
-
-    const center = container.scrollLeft + container.clientWidth / 2;
-    let best = 0, bestDist = Infinity;
-    items.forEach((it, i) => {
-      const itCenter = it.offsetLeft + it.offsetWidth / 2;
-      const d = Math.abs(itCenter - center);
-      if (d < bestDist) { bestDist = d; best = i; }
-    });
-
-    const target = nextBtn ? best + 1 : best - 1;
-    const i = Math.max(0, Math.min(items.length - 1, target));
-    items[i].scrollIntoView({ behavior: 'smooth', inline: 'center' });
-    setTimeout(() => items.forEach((it, idx) => it.classList.toggle('active', idx === i)), 360);
-  });
 
 });
