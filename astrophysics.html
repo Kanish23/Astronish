@@ -1,38 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astrophysics</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <a href="index.html" class="back-button">← Back</a>
-        
+
     <header>
         <h1 class="page-title">Astrophysics</h1>
     </header>
-	
-    
+
+
 
     <section class="intro">
-        <p>Welcome to the Astrophysics section! Here, you'll explore the fundamental laws of the universe, the nature of light, stellar properties, and much more.</p>
+        <p>Welcome to the Astrophysics section! Here, you'll explore the fundamental laws of the universe, the nature of
+            light, stellar properties, and much more.</p>
     </section>
 
-    <section class="topics astrophysics-topics">
-        <div class="topic-box astrophysics-topic" onclick="location.href='newton.html';">Newton's & Kepler's Laws</div>
-        <div class="topic-box astrophysics-topic" onclick="location.href='spectroscopy.html';">Electromagnetic Spectrum & Spectroscopy</div>
-        <div class="topic-box astrophysics-topic" onclick="location.href='stellar_properties.html';">Stellar Properties</div>
-        <div class="topic-box astrophysics-topic" onclick="location.href='relativity_gravity.html';">General Relativity & Gravity</div>
-        <!-- Fix this last topic box, it refers to a new category or I need to change the name or something like that.-->
-        <div class="topic-box astrophysics-topic" onclick="location.href='kepler.html';">Cosmic Microwave Background & Big Bang Theory</div>
-    </section>
-	<button onclick="startQuiz('astrophysics')">Take Astrophysics Quiz</button>
-	<script>
-  		function startQuiz(topic) {
-   		localStorage.setItem('quizTopic', 'astrophysics');
-   		window.location.href = 'quiz.html';
- 		}	
-	</script>
+    <!-- Replacement: Shared Carousel -->
+    <div id="astrophysics-carousel" class="content-carousel-container"></div>
+
+    <button onclick="startQuiz('astrophysics')" class="primary-button"
+        style="max-width:300px; display:block; margin:20px auto;">Take Astrophysics Quiz</button>
+
+    <script src="content-carousel.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const physicsItems = [
+                { name: "Newton's & Kepler's Laws", image: "images/nebula.jpg", url: "newton.html" },
+                { name: "Electromagnetic Spectrum", image: "images/orion.jpg", url: "spectroscopy.html" },
+                { name: "Stellar Properties", image: "images/supernova.jpg", url: "stellar_properties.html" },
+                { name: "General Relativity", image: "images/guyfloating.jpg", url: "relativity_gravity.html" },
+                { name: "Big Bang Theory", image: "images/southernring.png", url: "kepler.html" }
+            ];
+
+            new ContentCarousel({
+                containerId: 'astrophysics-carousel',
+                items: physicsItems
+            });
+        });
+
+        function startQuiz(topic) {
+            localStorage.setItem('quizTopic', 'astrophysics');
+            window.location.href = 'quiz.html';
+        }	
+    </script>
 </body>
+
 </html>
