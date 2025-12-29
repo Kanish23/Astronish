@@ -25,6 +25,9 @@
     <!-- Container for the new JS Carousel -->
     <div id="astronomy-carousel" class="content-carousel-container"></div>
 
+    <button onclick="startQuiz('astronomy')" class="primary-button"
+        style="max-width:300px; display:block; margin:20px auto;">Take Astronomy Quiz</button>
+
     <!-- Firebase Scripts (if needed globally, otherwise just the carousel script) -->
     <script src="content-carousel.js"></script>
     <script>
@@ -42,6 +45,11 @@
                 items: astronomyItems
             });
         });
+
+        function startQuiz(topic) {
+            localStorage.setItem('quizTopic', topic);
+            window.location.href = 'quiz.html';
+        }
     </script>
 </body>
 
