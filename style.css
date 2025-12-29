@@ -552,6 +552,8 @@ nav ul li a:focus-visible {
   /* Will be transformed via JS */
   will-change: transform;
   /* Transition handled by JS class toggling or inline styles */
+  padding: 40px 0;
+  /* meaningful padding to allow scale expansion without clipping */
 }
 
 .content-carousel-item {
