@@ -519,3 +519,158 @@ nav ul li a:focus-visible {
 /* Re-use primary styling for prominent action if desired, 
    but user requested using GLOBAL classes. 
    We will rely on specific selectors in JS or here. */
+
+/* =========================================
+   Content Page Carousel (Global Standard)
+   ========================================= */
+
+.content-carousel-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 0;
+  /* Space for scaling */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.content-carousel-track-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  /* Mask the edges for better aesthetic if desired, or keep full width */
+}
+
+.content-carousel-track {
+  display: flex;
+  align-items: center;
+  /* Will be transformed via JS */
+  will-change: transform;
+  /* Transition handled by JS class toggling or inline styles */
+}
+
+.content-carousel-item {
+  flex: 0 0 auto;
+  /* Width + margin handled in JS usually, but lets set a base */
+  width: 220px;
+  margin: 0 16px;
+  /* Spacing */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+
+  /* Transition for the scale/filter effect */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.4s ease,
+    filter 0.4s ease;
+
+  /* Default Inactive State */
+  transform: scale(0.85);
+  opacity: 0.5;
+  filter: grayscale(80%);
+  user-select: none;
+}
+
+.content-carousel-item.active {
+  /* Active State (Center) */
+  transform: scale(1.15);
+  opacity: 1;
+  filter: grayscale(0%);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+/* Image styling within the item */
+.content-carousel-image {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  /* Circular as per user preference on other pages */
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.content-carousel-item.active .content-carousel-image {
+  border-color: #fff;
+  box-shadow: 0 0 25px rgba(255, 149, 1, 0.6);
+  /* Orange/Gold glow */
+}
+
+.content-carousel-title {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ccc;
+  transition: color 0.3s;
+}
+
+.content-carousel-item.active .content-carousel-title {
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Dots */
+.content-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.content-carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.content-carousel-dot.active {
+  background-color: #ff9501;
+  transform: scale(1.2);
+}
+
+/* Navigation Arrow Overrides for this context if needed, 
+   or reuse .carousel-btn from main CSS */
+.content-nav-btn {
+  position: absolute;
+  top: 45%;
+  /* Slightly up to align with image center approx */
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.content-nav-btn:hover {
+  background: rgba(255, 149, 1, 0.8);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.content-nav-prev {
+  left: 10px;
+}
+
+.content-nav-next {
+  right: 10px;
+}
