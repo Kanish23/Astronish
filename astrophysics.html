@@ -28,15 +28,21 @@
     <button onclick="startQuiz('astrophysics')" class="primary-button"
         style="max-width:300px; display:block; margin:20px auto;">Take Astrophysics Quiz</button>
 
+    <!-- Firebase Scripts (Compat) for Progress Bars -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
     <script src="content-carousel.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const physicsItems = [
-                { name: "Newton's & Kepler's Laws", image: "images/nebula.jpg", url: "newton.html" },
-                { name: "Electromagnetic Spectrum", image: "images/orion.jpg", url: "spectroscopy.html" },
-                { name: "Stellar Properties", image: "images/supernova.jpg", url: "stellar_properties.html" },
-                { name: "General Relativity", image: "images/guyfloating.jpg", url: "relativity_gravity.html" },
-                { name: "Big Bang Theory", image: "images/southernring.png", url: "kepler.html" }
+                { name: "Newton's & Kepler's Laws", image: "images/nebula.jpg", url: "newton.html", quizId: "astrophysics_item1" },
+                { name: "Electromagnetic Spectrum", image: "images/orion.jpg", url: "spectroscopy.html", quizId: "astrophysics_item2" },
+                { name: "Stellar Properties", image: "images/supernova.jpg", url: "stellar_properties.html", quizId: "astrophysics_item3" },
+                { name: "General Relativity", image: "images/guyfloating.jpg", url: "relativity_gravity.html", quizId: "astrophysics_item4" },
+                { name: "Big Bang Theory", image: "images/southernring.png", url: "kepler.html", quizId: "astrophysics_item5" }
             ];
 
             new ContentCarousel({
@@ -45,10 +51,9 @@
             });
         });
 
-        function startQuiz(topic) {
-            localStorage.setItem('quizTopic', 'astrophysics');
-            window.location.href = 'quiz.html';
-        }	
+        function startQuiz(type) {
+            window.location.href = `quiz.html?section=${type}`;
+        }
     </script>
 </body>
 

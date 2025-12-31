@@ -101,15 +101,76 @@ class ContentCarousel {
             // But usually infinite carousels just move. Let's make click center it.
             el.addEventListener('click', () => {
                 if (this.currentIndex === index) {
-                    // It's already active, navigate
+                    // If Item has a 'url', go there (topic pages)
+                    // BUT user wants carousel items to have progress bars for QUIZZES?
+                    // Actually the user requirement says: "Progress bars under each subsection" 
+                    // and "Each subsection quiz is accessed via quiz.html".
+                    // The current items link to content pages (telescopes.html).
+                    // Those content pages should link to the quiz? 
+                    // OR the card itself links to the content, and the progress bar shows quiz progress?
+                    // The prompts says: "Progress bars under each subsection... Each subsection card displays a progress bar underneath it".
+
                     if (this.onNavigate) this.onNavigate(item);
                     else if (item.url) window.location.href = item.url;
                 } else {
-                    // Move to this index
                     const diff = index - this.currentIndex;
                     this.move(diff);
                 }
             });
+
+            // Render Progress Bar Container
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'carousel-progress-container';
+            progressContainer.style.marginTop = '10px';
+            progressContainer.style.width = '80%';
+            progressContainer.style.height = '6px';
+            progressContainer.style.backgroundColor = 'rgba(255,255,255,0.2)';
+            progressContainer.style.borderRadius = '3px';
+            progressContainer.style.overflow = 'hidden';
+            progressContainer.style.display = 'none'; // Hidden by default until we have data
+
+            const progressBar = document.createElement('div');
+            progressBar.className = 'carousel-progress-bar';
+            progressBar.style.height = '100%';
+            progressBar.style.width = '0%';
+            progressBar.style.backgroundColor = '#ff9501';
+            progressBar.style.transition = 'width 0.5s ease';
+
+            progressContainer.appendChild(progressBar);
+            el.appendChild(progressContainer);
+
+            // Fetch Progress if logged in
+            // (We need access to firebase auth here. Assuming it's available globally via script.js/firebase.js)
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                firebase.auth().onAuthStateChanged(user => {
+                    if (user) {
+                        const db = firebase.firestore();
+                        // Construct Quiz ID: section_subsection
+                        // We need to know which section we are in. 
+                        // Let's pass 'section' in the constructor or item data.
+                        // For now, let's assume item has a 'quizId' property or we derive it.
+                        // If not provided, we might skip.
+
+                        if (item.quizId) {
+                            const docRef = db.collection('users').doc(user.uid).collection('quizProgress').doc(item.quizId);
+                            docRef.get().then(doc => {
+                                if (doc.exists) {
+                                    const data = doc.data();
+                                    if (data.percentage !== undefined) {
+                                        progressBar.style.width = `${data.percentage}%`;
+                                        progressContainer.style.display = 'block';
+                                    } else if (data.answers && data.totalQuestions) {
+                                        const answered = Object.keys(data.answers).length;
+                                        const pct = (answered / data.totalQuestions) * 100;
+                                        progressBar.style.width = `${pct}%`;
+                                        progressContainer.style.display = 'block';
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
 
             this.track.appendChild(el);
         });
