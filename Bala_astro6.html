@@ -28,16 +28,22 @@
     <button onclick="startQuiz('astronomy')" class="primary-button"
         style="max-width:300px; display:block; margin:20px auto;">Take Astronomy Quiz</button>
 
-    <!-- Firebase Scripts (if needed globally, otherwise just the carousel script) -->
+    <!-- Firebase Scripts (Compat) for Progress Bars -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- Content Carousel Script -->
     <script src="content-carousel.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const astronomyItems = [
-                { name: "Telescopes", image: "images/telescope1.jpeg", url: "telescopes.html" },
-                { name: "Position Calculation", image: "images/starmap.jpg", url: "position_calculation.html" },
-                { name: "Stars", image: "images/sun.jpg", url: "stars.html" },
-                { name: "Galaxies", image: "images/galaxy1.jpg", url: "galaxies.html" },
-                { name: "Cosmology", image: "images/ultrawide.jpg", url: "cosmology.html" },
+                { name: "Telescopes", image: "images/telescope1.jpeg", url: "telescopes.html", quizId: "astronomy_item1" },
+                { name: "Position Calculation", image: "images/starmap.jpg", url: "position_calculation.html", quizId: "astronomy_item2" },
+                { name: "Stars", image: "images/sun.jpg", url: "stars.html", quizId: "astronomy_item3" },
+                { name: "Galaxies", image: "images/galaxy1.jpg", url: "galaxies.html", quizId: "astronomy_item4" },
+                { name: "Cosmology", image: "images/ultrawide.jpg", url: "cosmology.html", quizId: "astronomy_item5" },
             ];
 
             new ContentCarousel({
@@ -46,9 +52,9 @@
             });
         });
 
-        function startQuiz(topic) {
-            localStorage.setItem('quizTopic', topic);
-            window.location.href = 'quiz.html';
+        function startQuiz(type) {
+            // type is 'astronomy' (unit)
+            window.location.href = `quiz.html?section=${type}`;
         }
     </script>
 </body>
