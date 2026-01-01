@@ -729,3 +729,10 @@ nav ul li a:focus-visible {
   background-color: #ff9501;
   transition: width 0.5s ease;
 }
+
+.error-x {
+  color: #ff4d4d;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-left: 10px;
+}

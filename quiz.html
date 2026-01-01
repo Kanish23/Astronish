@@ -12,17 +12,20 @@
   <header>
     <a href="index.html" class="back-button">← Back</a>
   </header>
-  <div class="header-content">
-    <h1 class="page-title">Unit Quiz</h1>
-  </div>
+  <section class="main-content" style="padding-top:20px;">
+    <div class="header-content">
+      <h1 class="page-title">Unit Quiz</h1>
+    </div>
 
-  <div id="quiz-container">
-    <form id="quiz-form">
-      <div id="questions-container"></div>
-      <button type="submit">Submit Quiz</button>
-    </form>
-    <div id="score-display" style="margin-top: 20px;"></div>
-  </div>
+    <div id="quiz-container">
+      <form id="quiz-form">
+        <div id="questions-container"></div>
+        <button type="submit" class="primary-button"
+          style="margin-top:20px; max-width:200px; margin-left:auto; margin-right:auto;">Submit Quiz</button>
+      </form>
+      <div id="score-display" style="margin-top: 20px; text-align:center;"></div>
+    </div>
+  </section>
 
 
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
