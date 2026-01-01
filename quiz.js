@@ -1,156 +1,168 @@
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Parse URL Params to determine which quiz to load
-  const urlParams = new URLSearchParams(window.location.search);
-  const section = urlParams.get('section'); // e.g., 'astronomy' or 'astrophysics'
-  const subsection = urlParams.get('subsection'); // e.g., 'telescopes' or 'item1' (key in data)
+let currentQuestions = []; // Store current set for redo clarity
 
-  // Helper: Generate a unique ID for this specific quiz (for Firestore persistence)
-  // Structure: "astronomy_unit" or "astronomy_telescopes"
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const section = urlParams.get('section');
+  const subsection = urlParams.get('subsection');
   const quizId = `${section}_${subsection || 'unit'}`;
 
-  // 2. Load the correct questions from QUIZ_DATA
-  let questions = [];
-  let sectionTitle = "";
+  // 1. Dynamic Back Button
+  const backBtn = document.querySelector('.back-button');
+  if (backBtn && section) {
+    // If we are in a subsection, go back to the section page
+    if (section === 'astronomy') backBtn.href = 'Bala_astro6.html';
+    else if (section === 'astrophysics') backBtn.href = 'astrophysics.html';
+  }
 
+  // 2. Load Data
   if (!window.QUIZ_DATA || !window.QUIZ_DATA[section]) {
-    alert("Quiz data not found for this section.");
+    document.getElementById("questions-container").innerHTML = "<p>Quiz data not found.</p>";
     return;
   }
 
+  let originalQuestions = [];
+  let sectionTitle = "";
+
   if (subsection) {
-    // Subsection Quiz
-    questions = window.QUIZ_DATA[section].subsections[subsection];
+    originalQuestions = window.QUIZ_DATA[section].subsections[subsection];
     sectionTitle = `${capitalize(section)}: ${capitalize(subsection.replace('item', 'Topic '))}`;
   } else {
-    // Unit Quiz
-    questions = window.QUIZ_DATA[section].unit;
+    originalQuestions = window.QUIZ_DATA[section].unit;
     sectionTitle = `${capitalize(section)} Unit Quiz`;
   }
 
-  if (!questions) {
-    alert("No questions found for this topic.");
-    return;
-  }
-
-  // Update Header
   document.querySelector('.page-title').textContent = sectionTitle;
 
-  // 3. Render Questions
-  const container = document.getElementById("questions-container");
-  container.innerHTML = ''; // Clear loading state
+  // 3. Render Function (supports shuffling)
+  function renderQuiz(questionsToRender) {
+    const container = document.getElementById("questions-container");
+    container.innerHTML = '';
+    currentQuestions = questionsToRender; // Update global state
 
-  questions.forEach((q, index) => {
-    const block = document.createElement("div");
-    block.className = "question-block";
-    block.innerHTML = `
-            <p class="question-text">${index + 1}. ${q.question}</p>
-            <div class="options-container">
-                ${q.options.map(option => `
-                    <label class="option-label">
-                        <input type="radio" name="q${index}" value="${option}" data-index="${index}">
-                        ${option}
-                    </label>
-                `).join('')}
-            </div>
-        `;
-    container.appendChild(block);
-  });
+    currentQuestions.forEach((q, index) => {
+      const block = document.createElement("div");
+      block.className = "question-block";
+      // Store correct answer in data attribute for easy validation later
+      block.dataset.correct = q.correctAnswer;
 
-  // 4. Handle Auth & Persistence
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      // User is logged in: Load progress
-      const docRef = db.collection('users').doc(user.uid).collection('quizProgress').doc(quizId);
+      block.innerHTML = `
+                <p class="question-text">${index + 1}. ${q.question}</p>
+                <div class="options-container" id="q${index}-options">
+                    ${q.options.map(option => `
+                        <label class="option-label">
+                            <input type="radio" name="q${index}" value="${option}">
+                            <span class="option-text">${option}</span>
+                            <span class="feedback-icon"></span>
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+      container.appendChild(block);
+    });
 
-      try {
-        const doc = await docRef.get();
-        if (doc.exists) {
-          const data = doc.data();
+    // Hide score/redo on fresh render
+    const scoreDisplay = document.getElementById("score-display");
+    scoreDisplay.innerHTML = "";
+    scoreDisplay.style.display = 'none';
 
-          // Restore answers
-          if (data.answers) {
-            Object.keys(data.answers).forEach(key => { // key is index "0", "1"...
-              const val = data.answers[key];
-              const input = document.querySelector(`input[name="q${key}"][value="${val}"]`);
-              if (input) input.checked = true;
-            });
+    const submitBtn = document.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.style.display = 'block';
+  }
+
+  // Initial Load (Shuffle)
+  renderQuiz(shuffleArray([...originalQuestions]));
+
+  // 4. Persistence (Load Previous Answers) - Adjusted to be simple for now
+  // Since we shuffle, index-based restoring is tricky. 
+  // For now, we only auto-load if we haven't shuffled (or we disable shuffle on resume).
+  // Given the user wants "Shuffle", we prioritize that. 
+  // We will still log persistence for the progress bar, but maybe not pre-populate the answers 
+  // if the order is randomized every time.
+
+  // 5. Submit Handler
+  const form = document.getElementById("quiz-form");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      console.log("Submitting quiz...");
+
+      let score = 0;
+      let incorrectCount = 0;
+
+      // Clear previous marks
+      document.querySelectorAll('.error-x').forEach(el => el.remove());
+      document.querySelectorAll('.feedback-icon').forEach(el => el.innerHTML = '');
+
+      currentQuestions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+
+        if (selected) {
+          if (selected.value === q.correctAnswer) {
+            score++;
+          } else {
+            incorrectCount++;
+            // Mark incorrect
+            const label = selected.closest('label');
+            const feedback = label.querySelector('.feedback-icon');
+            if (feedback) feedback.innerHTML = '<span class="error-x">❌</span>';
           }
-
-          // If quiz was already completed, show score immediately? 
-          // Optional: For now we just let them see their answers and re-submit if they want.
-        }
-      } catch (error) {
-        console.error("Error loading progress:", error);
-      }
-
-      // Enable Auto-Save on selection
-      container.addEventListener('change', (e) => {
-        if (e.target.type === 'radio') {
-          const index = e.target.getAttribute('data-index');
-          const value = e.target.value;
-
-          // Save specific answer
-          docRef.set({
-            answers: {
-              [index]: value
-            },
-            lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-            totalQuestions: questions.length
-            // We calculate 'completedQuestions' by count in cloud functions or just client side read
-          }, { merge: true });
         }
       });
 
-    } else {
-      console.log("User not logged in. Progress will not be saved.");
-      // Optional: Show a toast/banner encouraging login
-    }
-  });
+      // Show Results
+      const scoreDisplay = document.getElementById("score-display");
+      const percentage = Math.round((score / currentQuestions.length) * 100);
 
-  // 5. Handle Submission
-  document.getElementById("quiz-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    let score = 0;
-    let answeredParams = {};
+      scoreDisplay.style.display = 'block';
+      scoreDisplay.innerHTML = `
+                <h3>You scored ${score} / ${currentQuestions.length} (${percentage}%)</h3>
+                <p>${incorrectCount > 0 ? 'Check the markings above to see incorrect answers.' : 'Perfect Score!'}</p>
+                <button type="button" id="redo-btn" class="primary-button" style="margin-top:15px; display:block; margin-left:auto; margin-right:auto;">Redo Quiz (New Questions)</button>
+            `;
 
-    questions.forEach((q, i) => {
-      const selected = document.querySelector(`input[name="q${i}"]:checked`);
-      if (selected) {
-        answeredParams[i] = selected.value;
-        if (selected.value === q.correctAnswer) {
-          score++;
-        }
+      // Hide Submit Button
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.style.display = 'none';
+
+      // Bind Redo
+      const redoBtn = document.getElementById("redo-btn");
+      if (redoBtn) {
+        redoBtn.addEventListener("click", () => {
+          renderQuiz(shuffleArray([...originalQuestions]));
+          window.scrollTo(0, 0);
+        });
+      }
+
+      // Save Progress if logged in (Background)
+      const user = auth.currentUser;
+      if (user) {
+        const docRef = db.collection('users').doc(user.uid).collection('quizProgress').doc(quizId);
+        docRef.set({
+          score: score,
+          completed: true,
+          totalQuestions: currentQuestions.length,
+          percentage: percentage,
+          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }).catch(err => console.log("Save error", err));
       }
     });
-
-    // Display Score
-    const scoreDisplay = document.getElementById("score-display");
-    const percentage = Math.round((score / questions.length) * 100);
-    scoreDisplay.innerHTML = `
-            <h3>You scored ${score} / ${questions.length} (${percentage}%)</h3>
-            <p>${percentage >= 70 ? 'Great job! 🌟' : 'Keep studying! 📚'}</p>
-        `;
-
-    // Save Final Score if logged in
-    const user = auth.currentUser;
-    if (user) {
-      const docRef = db.collection('users').doc(user.uid).collection('quizProgress').doc(quizId);
-      await docRef.set({
-        answers: answeredParams, // Ensure all current state is saved
-        score: score,
-        completed: true,
-        completedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        totalQuestions: questions.length,
-        percentage: percentage
-      }, { merge: true });
-    }
-  });
+  } else {
+    console.error("Quiz form not found!");
+  }
 });
 
-// Helper
+// Helper: Shuffle
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 function capitalize(str) {
   if (!str) return '';
   return str.charAt(0).toUpperCase() + str.slice(1);
